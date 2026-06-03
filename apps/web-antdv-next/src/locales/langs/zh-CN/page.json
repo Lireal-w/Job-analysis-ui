@@ -36,6 +36,11 @@
     "sysUser": "用户管理",
     "profile": "个人中心"
   },
+  "crawler": {
+    "title": "爬虫管理",
+    "management": "爬虫目录",
+    "analysis": "数据分析"
+  },
   "monitor": {
     "redis": {
       "cards": {

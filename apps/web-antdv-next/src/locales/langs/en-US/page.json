@@ -36,6 +36,11 @@
     "sysUser": "User",
     "profile": "Profile"
   },
+  "crawler": {
+    "title": "Crawler",
+    "management": "Management",
+    "analysis": "Data Analysis"
+  },
   "monitor": {
     "redis": {
       "cards": {
