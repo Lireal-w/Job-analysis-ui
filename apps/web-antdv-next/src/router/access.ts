@@ -43,35 +43,6 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
         path: '/job-dashboard',
         component: '/job-dashboard/index',
       });
-      // 合并爬虫管理菜单
-      menus.push({
-        meta: {
-          title: '爬虫管理',
-          icon: 'ant-design:bug-filled',
-        },
-        name: 'Crawler',
-        path: '/crawler',
-        children: [
-          {
-            meta: {
-              title: '爬虫目录',
-              icon: 'ant-design:code-outlined',
-            },
-            name: 'CrawlerManagement',
-            path: '/crawler/management',
-            component: '/crawler/management/index',
-          },
-          {
-            meta: {
-              title: '数据分析',
-              icon: 'ant-design:setting-outlined',
-            },
-            name: 'CrawlerAnalysis',
-            path: '/crawler/analysis',
-            component: '/crawler/analysis/index',
-          },
-        ],
-      });
       return menus;
     },
     // 可以指定没有权限跳转403页面
