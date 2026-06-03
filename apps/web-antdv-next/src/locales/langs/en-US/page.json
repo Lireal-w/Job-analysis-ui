@@ -41,6 +41,9 @@
     "management": "Management",
     "analysis": "Data Analysis"
   },
+  "jobDashboard": {
+    "title": "Job Data Analysis"
+  },
   "monitor": {
     "redis": {
       "cards": {

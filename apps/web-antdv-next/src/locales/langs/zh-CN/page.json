@@ -41,6 +41,9 @@
     "management": "爬虫目录",
     "analysis": "数据分析"
   },
+  "jobDashboard": {
+    "title": "岗位数据分析"
+  },
   "monitor": {
     "redis": {
       "cards": {

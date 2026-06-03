@@ -123,6 +123,12 @@ const quickNavItems: WorkbenchQuickNavItem[] = [
     title: '图表',
     url: '/analytics',
   },
+  {
+    color: '#722ed1',
+    icon: 'ant-design:dashboard-filled',
+    title: '岗位数据分析',
+    url: '/job-dashboard',
+  },
 ];
 
 const todoItems = ref<WorkbenchTodoItem[]>([
