@@ -5,4 +5,5 @@ export * from './log';
 export * from './monitor';
 export * from './plugin';
 export * from './role';
+export * from './job-dashboard';
 export * from './scheduler';

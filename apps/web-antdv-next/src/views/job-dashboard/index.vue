@@ -5,18 +5,32 @@ import { Page } from '@vben/common-ui';
 import { usePreferences } from '@vben/preferences';
 
 import {
-  cityData,
-  educationData,
-  experienceData,
-  hotJobData,
-  industryData,
-  jobTrendData,
-  jobTypeData,
-  overviewStats,
-  salaryRangeData,
+  fetchCityData,
+  fetchEducationData,
+  fetchExperienceData,
+  fetchHotJobData,
+  fetchIndustryData,
+  fetchJobTrendData,
+  fetchJobTypeData,
+  fetchOverviewStats,
+  fetchSalaryRangeData,
 } from './data';
 
 const { isDark } = usePreferences();
+
+/** 响应式数据 */
+const overviewStats = ref({ totalJobs: 0, todayNew: 0, avgSalary: 0, totalCompanies: 0 });
+const jobTrendData = ref<any[]>([]);
+const industryData = ref<any[]>([]);
+const educationData = ref<any[]>([]);
+const hotJobData = ref<any[]>([]);
+const cityData = ref<any[]>([]);
+const experienceData = ref<any[]>([]);
+const salaryRangeData = ref<any[]>([]);
+const jobTypeData = ref<any[]>([]);
+
+/** 数据加载状态 */
+const loading = ref(true);
 
 /** 主题色配置 */
 const themeColors = computed(() => {
@@ -41,6 +55,48 @@ const totalJobsValue = ref(0);
 const todayNewValue = ref(0);
 const avgSalaryValue = ref(0);
 const totalCompaniesValue = ref(0);
+
+/** 异步加载所有数据 */
+async function loadAllData() {
+  loading.value = true;
+  try {
+    const [
+      overview,
+      trend,
+      industry,
+      education,
+      hotJobs,
+      city,
+      experience,
+      salaryRange,
+      jobType,
+    ] = await Promise.all([
+      fetchOverviewStats(),
+      fetchJobTrendData(),
+      fetchIndustryData(),
+      fetchEducationData(),
+      fetchHotJobData(),
+      fetchCityData(),
+      fetchExperienceData(),
+      fetchSalaryRangeData(),
+      fetchJobTypeData(),
+    ]);
+
+    overviewStats.value = overview;
+    jobTrendData.value = trend;
+    industryData.value = industry;
+    educationData.value = education;
+    hotJobData.value = hotJobs;
+    cityData.value = city;
+    experienceData.value = experience;
+    salaryRangeData.value = salaryRange;
+    jobTypeData.value = jobType;
+  } catch (error) {
+    console.error('加载大屏数据失败:', error);
+  } finally {
+    loading.value = false;
+  }
+}
 
 function startNumberAnimation(
   target: number,
@@ -106,7 +162,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   trendChart
-    .data(jobTrendData)
+    .data(jobTrendData.value)
     .interaction({ tooltip: { shared: true } });
 
   trendChart
@@ -145,7 +201,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   industryChart
-    .data(industryData)
+    .data(industryData.value)
     .coordinate({ type: 'theta', innerRadius: 0.6 })
     .interaction({ tooltip: { shared: true } });
 
@@ -174,7 +230,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   educationChart
-    .data(educationData)
+    .data(educationData.value)
     .coordinate({ type: 'theta', innerRadius: 0.2 })
     .interaction({ tooltip: { shared: true } });
 
@@ -203,7 +259,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   hotJobChart
-    .data(hotJobData)
+    .data(hotJobData.value)
     .coordinate({ transform: [{ type: 'transpose' }] })
     .interaction({ tooltip: { shared: true } });
 
@@ -235,7 +291,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   cityChart
-    .data(cityData)
+    .data(cityData.value)
     .interaction({ tooltip: { shared: true } });
 
   cityChart
@@ -264,7 +320,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   experienceChart
-    .data(experienceData)
+    .data(experienceData.value)
     .coordinate({ type: 'theta', innerRadius: 0.6 })
     .interaction({ tooltip: { shared: true } });
 
@@ -293,7 +349,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   salaryChart
-    .data(salaryRangeData)
+    .data(salaryRangeData.value)
     .interaction({ tooltip: { shared: true } });
 
   salaryChart
@@ -331,7 +387,7 @@ async function renderCharts() {
     theme: commonTheme,
   });
   jobTypeChart
-    .data(jobTypeData)
+    .data(jobTypeData.value)
     .coordinate({ type: 'theta', innerRadius: 0.5 })
     .interaction({ tooltip: { shared: true } });
 
@@ -341,7 +397,7 @@ async function renderCharts() {
     .encode('color', 'type')
     .style('stroke', tc.strokeColor, 'lineWidth', 2)
     .label({
-      text: (d: any) => `${d.type}\n${(d.value / jobTypeData.reduce((s, i) => s + i.value, 0) * 100).toFixed(1)}%`,
+      text: (d: any) => `${d.type}\n${(d.value / jobTypeData.value.reduce((s: number, i: any) => s + i.value, 0) * 100).toFixed(1)}%`,
       position: 'outside',
       style: { fontSize: 11, fill: tc.labelColor },
     })
@@ -354,11 +410,12 @@ async function renderCharts() {
   chartInstances.push(jobTypeChart);
 }
 
-onMounted(() => {
-  startNumberAnimation(overviewStats.totalJobs, totalJobsValue);
-  startNumberAnimation(overviewStats.todayNew, todayNewValue);
-  startNumberAnimation(overviewStats.avgSalary, avgSalaryValue);
-  startNumberAnimation(overviewStats.totalCompanies, totalCompaniesValue);
+onMounted(async () => {
+  await loadAllData();
+  startNumberAnimation(overviewStats.value.totalJobs, totalJobsValue);
+  startNumberAnimation(overviewStats.value.todayNew, todayNewValue);
+  startNumberAnimation(overviewStats.value.avgSalary, avgSalaryValue);
+  startNumberAnimation(overviewStats.value.totalCompanies, totalCompaniesValue);
   renderCharts();
 });
 
