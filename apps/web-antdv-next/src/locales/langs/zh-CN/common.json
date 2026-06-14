@@ -4,6 +4,7 @@
     "select": "请选择",
     "status": "状态"
   },
+  "manage": "管理",
   "table": {
     "created_time": "创建时间",
     "id": "序号",

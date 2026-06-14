@@ -46,6 +46,9 @@
   "jobDashboard": {
     "title": "Job Data Analysis"
   },
+  "todo": {
+    "emptyText": "All tasks completed"
+  },
   "monitor": {
     "redis": {
       "cards": {

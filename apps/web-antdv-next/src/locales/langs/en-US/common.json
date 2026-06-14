@@ -4,6 +4,7 @@
     "select": "Please select",
     "status": "Status"
   },
+  "manage": "Manage",
   "table": {
     "created_time": "Created Time",
     "id": "ID",

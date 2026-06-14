@@ -17,6 +17,7 @@ import {
   WorkbenchTodo,
   WorkbenchTrends,
 } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
@@ -231,6 +232,12 @@ function navTo(nav: WorkbenchProjectItem | WorkbenchQuickNavItem) {
     console.warn(`Unknown URL for navigation item: ${nav.title} -> ${nav.url}`);
   }
 }
+
+function goToTodo() {
+  router.push('/todo/list').catch((error) => {
+    console.error('Navigation failed:', error);
+  });
+}
 </script>
 
 <template>
@@ -256,7 +263,14 @@ function navTo(nav: WorkbenchProjectItem | WorkbenchQuickNavItem) {
           title="快捷导航"
           @click="navTo"
         />
-        <WorkbenchTodo :items="todoItems" class="mt-5" title="待办事项" />
+        <WorkbenchTodo
+          :empty-text="$t('page.todo.emptyText')"
+          :items="todoItems"
+          :manage-text="$t('common.manage')"
+          class="mt-5"
+          title="待办事项"
+          @manage="goToTodo"
+        />
         <AnalysisChartCard class="mt-5" title="访问来源">
           <AnalyticsVisitsSource />
         </AnalysisChartCard>
