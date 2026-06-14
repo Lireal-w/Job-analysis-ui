@@ -19,6 +19,8 @@
     "scheduler": "任务调度",
     "schedulerManage": "任务管理",
     "schedulerRecord": "执行记录",
+    "todo": "待办事项",
+    "todoList": "任务列表",
     "log": "日志管理",
     "login": "登录日志",
     "monitor": "系统监控",

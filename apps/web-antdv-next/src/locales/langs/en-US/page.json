@@ -19,6 +19,8 @@
     "scheduler": "Scheduler",
     "schedulerManage": "Manage",
     "schedulerRecord": "Record",
+    "todo": "Todo",
+    "todoList": "Task List",
     "log": "System Log",
     "login": "Login",
     "monitor": "System Monitor",
