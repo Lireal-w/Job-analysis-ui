@@ -2,7 +2,11 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { GoalResult } from '#/api';
 
+import { h } from 'vue';
+
 import { $t } from '@vben/locales';
+
+import { Tag } from 'antdv-next';
 
 /** 目标状态选项 */
 export const GOAL_STATUS_OPTIONS = [
@@ -10,6 +14,14 @@ export const GOAL_STATUS_OPTIONS = [
   { label: '进行中', value: 1, color: 'processing' },
   { label: '已完成', value: 2, color: 'success' },
 ];
+
+/** 渲染目标状态标签 */
+export function renderGoalStatusTag(status: number) {
+  const option = GOAL_STATUS_OPTIONS[status];
+  return option
+    ? h(Tag, { color: option.color }, () => option.label)
+    : h('span', String(status));
+}
 
 /** 目标表格列 */
 export function goalColumns(

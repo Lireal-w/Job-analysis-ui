@@ -271,7 +271,7 @@ const [ProgressModal, progressModalApi] = useVbenModal({
 /**
  * 目标管理 Drawer
  */
-const [GoalDrawer, goalDrawerApi] = useVbenDrawer({
+const [GoalDrawerComponent, goalDrawerApi] = useVbenDrawer({
   connectedComponent: GoalDrawer,
 });
 </script>
@@ -295,6 +295,6 @@ const [GoalDrawer, goalDrawerApi] = useVbenDrawer({
     <ProgressModal>
       <ProgressForm />
     </ProgressModal>
-    <GoalDrawer />
+    <GoalDrawerComponent />
   </Page>
 </template>
