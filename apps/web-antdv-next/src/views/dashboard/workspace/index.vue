@@ -6,7 +6,7 @@ import type {
   WorkbenchTrendItem,
 } from '@vben/common-ui';
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
@@ -20,6 +20,8 @@ import {
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
+
+import { getTodayTodosApi } from '#/api';
 
 import AnalyticsVisitsSource from '../analytics/analytics-visits-source.vue';
 
@@ -131,38 +133,30 @@ const quickNavItems: WorkbenchQuickNavItem[] = [
   },
 ];
 
-const todoItems = ref<WorkbenchTodoItem[]>([
-  {
-    completed: false,
-    content: `审查最近提交到Git仓库的前端代码，确保代码质量和规范。`,
-    date: '2024-07-30 11:00:00',
-    title: '审查前端代码提交',
-  },
-  {
-    completed: true,
-    content: `检查并优化系统性能，降低CPU使用率。`,
-    date: '2024-07-30 11:00:00',
-    title: '系统性能优化',
-  },
-  {
-    completed: false,
-    content: `进行系统安全检查，确保没有安全漏洞或未授权的访问。 `,
-    date: '2024-07-30 11:00:00',
-    title: '安全检查',
-  },
-  {
-    completed: false,
-    content: `更新项目中的所有npm依赖包，确保使用最新版本。`,
-    date: '2024-07-30 11:00:00',
-    title: '更新项目依赖',
-  },
-  {
-    completed: false,
-    content: `修复用户报告的页面UI显示问题，确保在不同浏览器中显示一致。 `,
-    date: '2024-07-30 11:00:00',
-    title: '修复UI显示问题',
-  },
-]);
+const todoItems = ref<WorkbenchTodoItem[]>([]);
+
+/** 从 API 加载今日待办事项 */
+async function loadTodoItems() {
+  try {
+    const data = await getTodayTodosApi();
+    todoItems.value = data.map((item) => ({
+      completed: item.status === 2,
+      content: item.description || item.remark || '暂无描述',
+      date: item.due_date
+        ? new Date(item.due_date).toLocaleString('zh-CN')
+        : item.created_time
+          ? new Date(item.created_time).toLocaleString('zh-CN')
+          : '',
+      title: item.title,
+    }));
+  } catch (error) {
+    console.error('加载待办事项失败:', error);
+  }
+}
+
+onMounted(() => {
+  loadTodoItems();
+});
 const trendItems: WorkbenchTrendItem[] = [
   {
     avatar: 'svg:avatar-1',
