@@ -5,7 +5,7 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { startProgress, stopProgress } from '@vben/utils';
 
-import { accessRoutes, coreRouteNames } from '#/router/routes';
+import { accessRoutes, coreRouteNames, staticRoutes } from '#/router/routes';
 import { useAuthStore, useWebSocketStore } from '#/store';
 
 import { generateAccess } from './access';
@@ -119,6 +119,18 @@ function setupAccessGuard(router: Router) {
     accessStore.setAccessMenus(accessibleMenus);
     accessStore.setAccessRoutes(accessibleRoutes);
     accessStore.setIsAccessChecked(true);
+
+    // 将静态路由（不经过后端权限过滤）重新添加到 Root 路由下
+    // generateAccessible 内部会 removeRoute('Root') 再重新 addRoute，
+    // 会导致初始 routes 中 Root 的静态路由子路由丢失，需要在这里补回
+    const rootRoute = router.getRoutes().find((r) => r.path === '/');
+    if (rootRoute) {
+      staticRoutes.forEach((route) => {
+        if (!rootRoute.children?.some((c) => c.name === route.name)) {
+          router.addRoute('Root', route as any);
+        }
+      });
+    }
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
         ? userInfo.homePath || preferences.app.defaultHomePath

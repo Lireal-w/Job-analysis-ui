@@ -38,8 +38,8 @@ const routes: RouteRecordRaw[] = [
 /** 基本路由列表，这些路由不需要进入权限拦截 */
 const coreRouteNames = traverseTreeValues(coreRoutes, (route) => route.name);
 
-/** 有权限校验的路由列表，包含动态路由和静态路由 */
-const accessRoutes = [...dynamicRoutes, ...pluginRoutes, ...staticRoutes];
+/** 有权限校验的路由列表，包含动态路由和插件路由 */
+const accessRoutes = [...dynamicRoutes, ...pluginRoutes];
 
 const componentKeys: string[] = Object.keys({
   ...import.meta.glob('../../views/**/*.vue'),
@@ -51,4 +51,4 @@ const componentKeys: string[] = Object.keys({
     return path.endsWith('.vue') ? path.slice(0, -4) : path;
   });
 
-export { accessRoutes, componentKeys, coreRouteNames, routes };
+export { accessRoutes, componentKeys, coreRouteNames, routes, staticRoutes };
