@@ -28,9 +28,14 @@ const staticRoutes: RouteRecordRaw[] = mergeRouteModules(staticRouteFiles);
 const externalRoutes: RouteRecordRaw[] = [];
 
 /** 路由列表，由基本路由、外部路由和404兜底路由组成
- *  无需走权限验证（会一直显示在菜单中） */
+ *  无需走权限验证（会一直显示在菜单中）
+ *  静态路由也加入初始配置，避免第一次导航时不存在导致 404 */
 const routes: RouteRecordRaw[] = [
-  ...coreRoutes,
+  {
+    ...coreRoutes[0],
+    children: [...(coreRoutes[0].children || []), ...staticRoutes],
+  },
+  ...coreRoutes.slice(1),
   ...externalRoutes,
   fallbackNotFoundRoute,
 ];
