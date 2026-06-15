@@ -21,6 +21,8 @@
     "schedulerRecord": "Record",
     "todo": "Todo",
     "todoList": "Task List",
+    "serverManage": "Server Management",
+    "serverList": "Server List",
     "log": "System Log",
     "login": "Login",
     "monitor": "System Monitor",
