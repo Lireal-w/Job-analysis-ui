@@ -1,15 +1,13 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeGridProps } from '#/adapter/vxe-table';
-import type { ServerResult } from '#/api';
+import type { SSHServerResult } from '#/api';
 
 import { $t } from '@vben/locales';
 
-import { SERVER_PROTOCOL_OPTIONS } from '#/api';
-
 /** 连接状态 */
 export const SERVER_STATUS_OPTIONS = [
-  { label: '离线', value: 0, color: 'error' },
-  { label: '在线', value: 1, color: 'success' },
+  { label: '停用', value: 0, color: 'error' },
+  { label: '正常', value: 1, color: 'success' },
 ];
 
 /** 查询表单 */
@@ -19,26 +17,11 @@ export const querySchema: VbenFormSchema[] = [
     fieldName: 'name',
     label: '服务器名称',
   },
-  {
-    component: 'Select',
-    componentProps: {
-      allowClear: true,
-      options: SERVER_PROTOCOL_OPTIONS,
-      placeholder: '请选择协议',
-    },
-    fieldName: 'protocol',
-    label: '连接协议',
-  },
-  {
-    component: 'Input',
-    fieldName: 'ip',
-    label: 'IP 地址',
-  },
 ];
 
 /** 表格列 */
 export function useColumns(
-  onActionClick?: OnActionClickFn<ServerResult>,
+  onActionClick?: OnActionClickFn<SSHServerResult>,
 ): VxeGridProps['columns'] {
   return [
     {
@@ -53,18 +36,9 @@ export function useColumns(
       minWidth: 150,
     },
     {
-      field: 'protocol',
-      title: '连接协议',
-      width: 100,
-      cellRender: {
-        name: 'CellTag',
-        options: SERVER_PROTOCOL_OPTIONS,
-      },
-    },
-    {
-      field: 'ip',
-      title: 'IP 地址',
-      width: 140,
+      field: 'host',
+      title: '主机地址',
+      width: 150,
     },
     {
       field: 'port',
@@ -78,15 +52,15 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: '连接状态',
-      width: 90,
+      title: '状态',
+      width: 80,
       cellRender: {
         name: 'CellTag',
         options: SERVER_STATUS_OPTIONS,
       },
     },
     {
-      field: 'remark',
+      field: 'description',
       title: $t('common.table.mark'),
       minWidth: 120,
       showOverflow: 'ellipsis',
@@ -137,33 +111,9 @@ export const formSchema: VbenFormSchema[] = [
     rules: 'required',
   },
   {
-    component: 'Select',
-    componentProps: {
-      options: SERVER_PROTOCOL_OPTIONS,
-      placeholder: '请选择连接协议',
-      onChange: (value: string) => {
-        const option = SERVER_PROTOCOL_OPTIONS.find(
-          (p) => p.value === value,
-        );
-        if (option) {
-          // 自动填充协议默认端口
-          const portField = document.querySelector(
-            '[data-field-name="port"] input',
-          ) as HTMLInputElement;
-          if (portField) {
-            portField.value = String(option.port);
-          }
-        }
-      },
-    },
-    fieldName: 'protocol',
-    label: '连接协议',
-    rules: 'required',
-  },
-  {
     component: 'Input',
-    fieldName: 'ip',
-    label: 'IP 地址',
+    fieldName: 'host',
+    label: '主机地址',
     rules: 'required',
   },
   {
@@ -173,6 +123,7 @@ export const formSchema: VbenFormSchema[] = [
       max: 65535,
       placeholder: '端口号',
     },
+    defaultValue: 22,
     fieldName: 'port',
     label: '端口',
     rules: 'required',
@@ -189,8 +140,13 @@ export const formSchema: VbenFormSchema[] = [
     label: '密码',
   },
   {
+    component: 'Input',
+    fieldName: 'ssh_key',
+    label: 'SSH 密钥',
+  },
+  {
     component: 'Textarea',
-    fieldName: 'remark',
-    label: '备注',
+    fieldName: 'description',
+    label: '描述',
   },
 ];

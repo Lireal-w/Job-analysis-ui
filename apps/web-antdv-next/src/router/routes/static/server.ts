@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/server/index.vue'),
         meta: {
           title: $t('page.menu.serverList'),
-          icon: 'ant-design:server-outlined',
+          icon: 'ant-design:desktop-outlined',
         },
       },
     ],

@@ -6,8 +6,8 @@ import type {
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import type {
-  CreateServerParams,
-  ServerResult,
+  CreateSSHServerParams,
+  SSHServerResult,
 } from '#/api';
 
 import { computed, ref } from 'vue';
@@ -25,12 +25,11 @@ import { message, Modal } from 'antdv-next';
 import { useVbenForm } from '#/adapter/form';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
-  createServerApi,
-  deleteServerApi,
-  getServerListApi,
-  SERVER_PROTOCOL_OPTIONS,
-  testServerConnectionApi,
-  updateServerApi,
+  createSSHServerApi,
+  deleteSSHServerApi,
+  getSSHServerListApi,
+  testSSHConnectionApi,
+  updateSSHServerApi,
 } from '#/api';
 
 import { formSchema, querySchema, useColumns } from './data';
@@ -44,7 +43,7 @@ const formOptions: VbenFormProps = {
   schema: querySchema,
 };
 
-const gridOptions: VxeTableGridOptions<ServerResult> = {
+const gridOptions: VxeTableGridOptions<SSHServerResult> = {
   rowConfig: {
     keyField: 'id',
   },
@@ -68,7 +67,7 @@ const gridOptions: VxeTableGridOptions<ServerResult> = {
   proxyConfig: {
     ajax: {
       query: async ({ page }, formValues) => {
-        return await getServerListApi({
+        return await getSSHServerListApi({
           page: page.currentPage,
           size: page.pageSize,
           ...formValues,
@@ -84,10 +83,10 @@ function onRefresh() {
   gridApi.query();
 }
 
-function onActionClick({ code, row }: OnActionClickParams<ServerResult>) {
+function onActionClick({ code, row }: OnActionClickParams<SSHServerResult>) {
   switch (code) {
     case 'delete': {
-      deleteServerApi(row.id).then(() => {
+      deleteSSHServerApi([row.id]).then(() => {
         message.success({
           content: $t('ui.actionMessage.deleteSuccess', [row.name]),
           key: 'action_process_msg',
@@ -113,24 +112,25 @@ function onActionClick({ code, row }: OnActionClickParams<ServerResult>) {
  */
 const testingId = ref<number | null>(null);
 
-async function testConnection(row: ServerResult) {
+async function testConnection(row: SSHServerResult) {
   testingId.value = row.id;
   try {
-    const result = await testServerConnectionApi({
-      protocol: row.protocol,
-      ip: row.ip,
+    const result = await testSSHConnectionApi({
+      host: row.host,
       port: row.port,
       username: row.username,
+      password: row.password,
+      ssh_key: row.ssh_key,
     });
     if (result.success) {
       Modal.success({
         title: '连接测试',
-        content: `服务器「${row.name}」${result.message}`,
+        content: `服务器「${row.name}」连接成功！`,
       });
     } else {
       Modal.error({
         title: '连接测试',
-        content: `服务器「${row.name}」${result.message}`,
+        content: `服务器「${row.name}」${result.message || '连接失败'}`,
       });
     }
   } catch (error) {
@@ -152,7 +152,7 @@ const [EditForm, editFormApi] = useVbenForm({
   schema: formSchema,
 });
 
-interface formServerParams extends CreateServerParams {
+interface formServerParams extends CreateSSHServerParams {
   id?: number;
 }
 
@@ -160,8 +160,8 @@ const editFormData = ref<formServerParams>();
 
 const modalTitle = computed(() => {
   return editFormData.value?.id
-    ? $t('ui.actionTitle.edit', ['服务器'])
-    : $t('ui.actionTitle.create', ['服务器']);
+    ? $t('ui.actionTitle.edit', ['SSH 服务器'])
+    : $t('ui.actionTitle.create', ['SSH 服务器']);
 });
 
 const [EditModal, editModalApi] = useVbenModal({
@@ -170,11 +170,11 @@ const [EditModal, editModalApi] = useVbenModal({
     const { valid } = await editFormApi.validate();
     if (valid) {
       editModalApi.lock();
-      const data = await editFormApi.getValues<CreateServerParams>();
+      const data = await editFormApi.getValues<CreateSSHServerParams>();
       try {
         await (editFormData.value?.id
-          ? updateServerApi(editFormData.value.id, data)
-          : createServerApi(data));
+          ? updateSSHServerApi(editFormData.value.id, data)
+          : createSSHServerApi(data));
         message.success($t('ui.actionMessage.operationSuccess'));
         await editModalApi.close();
         onRefresh();
@@ -202,7 +202,7 @@ const [EditModal, editModalApi] = useVbenModal({
       <template #toolbar-actions>
         <VbenButton @click="() => editModalApi.setData(null).open()">
           <MaterialSymbolsAdd class="size-5" />
-          新增服务器
+          新增 SSH 服务器
         </VbenButton>
       </template>
     </Grid>
