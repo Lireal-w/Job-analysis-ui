@@ -76,6 +76,18 @@
   "todo": {
     "emptyText": "All tasks completed"
   },
+  "permission": {
+    "title": "Permission Management",
+    "management": "Permission Config"
+  },
+  "auditLog": {
+    "title": "Audit Log",
+    "list": "Log List"
+  },
+  "alert": {
+    "title": "Alert Management",
+    "management": "Alert Config"
+  },
   "monitor": {
     "redis": {
       "cards": {

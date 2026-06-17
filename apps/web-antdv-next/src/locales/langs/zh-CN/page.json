@@ -76,6 +76,18 @@
   "todo": {
     "emptyText": "所有任务已经完成"
   },
+  "permission": {
+    "title": "权限管理",
+    "management": "权限配置"
+  },
+  "auditLog": {
+    "title": "审计日志",
+    "list": "日志列表"
+  },
+  "alert": {
+    "title": "告警管理",
+    "management": "告警配置"
+  },
   "monitor": {
     "redis": {
       "cards": {

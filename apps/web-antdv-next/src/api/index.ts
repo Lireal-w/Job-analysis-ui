@@ -16,3 +16,6 @@ export * from './role';
 export * from './scheduler';
 export * from './server';
 export * from './todo';
+export * from './permission';
+export * from './audit-log';
+export * from './alert';

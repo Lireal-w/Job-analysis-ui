@@ -18,6 +18,13 @@ export const DATASOURCE_TYPES = [
   { label: 'JSON 文件', value: 'file_json' },
   { label: 'Kafka', value: 'kafka' },
   { label: 'S3/OSS', value: 's3' },
+  { label: 'Elasticsearch', value: 'elasticsearch' },
+  { label: 'ClickHouse', value: 'clickhouse' },
+  { label: 'FTP', value: 'ftp' },
+  { label: 'SFTP', value: 'sftp' },
+  { label: 'HTTP Webhook', value: 'http_webhook' },
+  { label: 'RabbitMQ', value: 'rabbitmq' },
+  { label: 'Hive', value: 'hive' },
 ];
 
 export const DB_TYPE_COLORS: Record<string, string> = {
@@ -34,6 +41,13 @@ export const DB_TYPE_COLORS: Record<string, string> = {
   file_json: 'gold',
   kafka: 'magenta',
   s3: 'volcano',
+  elasticsearch: 'purple',
+  clickhouse: 'cyan',
+  ftp: 'orange',
+  sftp: 'orange',
+  http_webhook: 'geekblue',
+  rabbitmq: 'volcano',
+  hive: 'gold',
 };
 
 export const DEFAULT_PORTS: Record<string, number> = {
@@ -50,6 +64,13 @@ export const DEFAULT_PORTS: Record<string, number> = {
   file_json: 0,
   kafka: 9092,
   s3: 0,
+  elasticsearch: 9200,
+  clickhouse: 8123,
+  ftp: 21,
+  sftp: 22,
+  http_webhook: 0,
+  rabbitmq: 5672,
+  hive: 10_000,
 };
 
 export const querySchema: VbenFormSchema[] = [
