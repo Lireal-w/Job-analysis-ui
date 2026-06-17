@@ -64,6 +64,15 @@
   "jobDashboard": {
     "title": "岗位数据分析"
   },
+  "query": {
+    "title": "查询分析",
+    "builder": "查询构建器"
+  },
+  "report": {
+    "title": "可视化报表",
+    "list": "报表列表",
+    "designer": "报表设计器"
+  },
   "todo": {
     "emptyText": "所有任务已经完成"
   },

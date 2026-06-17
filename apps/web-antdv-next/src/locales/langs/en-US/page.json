@@ -64,6 +64,15 @@
   "jobDashboard": {
     "title": "Job Data Analysis"
   },
+  "query": {
+    "title": "Query Analysis",
+    "builder": "Query Builder"
+  },
+  "report": {
+    "title": "Visual Reports",
+    "list": "Report List",
+    "designer": "Report Designer"
+  },
   "todo": {
     "emptyText": "All tasks completed"
   },

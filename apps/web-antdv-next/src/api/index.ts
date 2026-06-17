@@ -10,6 +10,8 @@ export * from './log';
 export * from './monitor';
 export * from './plugin';
 export * from './quality';
+export * from './query';
+export * from './report';
 export * from './role';
 export * from './scheduler';
 export * from './server';
