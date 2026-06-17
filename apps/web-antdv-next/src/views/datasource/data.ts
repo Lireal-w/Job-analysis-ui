@@ -12,6 +12,12 @@ export const DATASOURCE_TYPES = [
   { label: 'Redis', value: 'redis' },
   { label: 'SQL Server', value: 'mssql' },
   { label: 'Oracle', value: 'oracle' },
+  { label: 'REST API', value: 'api_rest' },
+  { label: 'CSV 文件', value: 'file_csv' },
+  { label: 'Excel 文件', value: 'file_excel' },
+  { label: 'JSON 文件', value: 'file_json' },
+  { label: 'Kafka', value: 'kafka' },
+  { label: 'S3/OSS', value: 's3' },
 ];
 
 export const DB_TYPE_COLORS: Record<string, string> = {
@@ -22,6 +28,12 @@ export const DB_TYPE_COLORS: Record<string, string> = {
   redis: 'red',
   mssql: 'purple',
   oracle: 'volcano',
+  api_rest: 'geekblue',
+  file_csv: 'lime',
+  file_excel: 'green',
+  file_json: 'gold',
+  kafka: 'magenta',
+  s3: 'volcano',
 };
 
 export const DEFAULT_PORTS: Record<string, number> = {
@@ -32,6 +44,12 @@ export const DEFAULT_PORTS: Record<string, number> = {
   redis: 6379,
   mssql: 1433,
   oracle: 1521,
+  api_rest: 0,
+  file_csv: 0,
+  file_excel: 0,
+  file_json: 0,
+  kafka: 9092,
+  s3: 0,
 };
 
 export const querySchema: VbenFormSchema[] = [

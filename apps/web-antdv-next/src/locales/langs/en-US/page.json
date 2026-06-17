@@ -49,6 +49,18 @@
     "title": "Datasource",
     "management": "Datasource Config"
   },
+  "etl": {
+    "title": "Data Processing",
+    "flow": "Flow Editor"
+  },
+  "quality": {
+    "title": "Data Quality",
+    "rules": "Quality Rules"
+  },
+  "dataset": {
+    "title": "Data Assets",
+    "management": "Dataset Management"
+  },
   "jobDashboard": {
     "title": "Job Data Analysis"
   },
