@@ -1,4 +1,3 @@
-
 <script lang="ts" setup>
 import type { VbenFormProps } from '@vben/common-ui';
 
@@ -6,8 +5,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-
-import { ref } from 'vue';
+import type { CrawlTaskResult } from '#/api';
 
 import { confirm, Page } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -15,8 +13,14 @@ import { $t } from '@vben/locales';
 import { message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  deleteCrawlTaskApi,
+  getCrawlTaskListApi,
+  startCrawlTaskApi,
+  stopCrawlTaskApi,
+} from '#/api';
 
-import { mockCrawlerData, querySchema, useColumns } from './data';
+import { querySchema, useColumns } from './data';
 
 const formOptions: VbenFormProps = {
   collapsed: true,
@@ -27,9 +31,12 @@ const formOptions: VbenFormProps = {
   schema: querySchema,
 };
 
-const gridOptions: VxeTableGridOptions = {
+const gridOptions: VxeTableGridOptions<CrawlTaskResult> = {
   rowConfig: {
     keyField: 'id',
+  },
+  checkboxConfig: {
+    highlight: true,
   },
   height: 'auto',
   exportConfig: {},
@@ -44,26 +51,15 @@ const gridOptions: VxeTableGridOptions = {
     custom: true,
     zoom: true,
   },
-  pagerConfig: {
-    enabled: false,
-  },
   columns: useColumns(onActionClick),
   proxyConfig: {
     ajax: {
-      query: async (_, formValues) => {
-        let data = [...mockCrawlerData];
-        if (formValues?.name) {
-          data = data.filter((item) =>
-            item.name.includes(formValues.name),
-          );
-        }
-        if (formValues?.status !== undefined && formValues?.status !== null) {
-          data = data.filter((item) => item.status === formValues.status);
-        }
-        if (formValues?.type) {
-          data = data.filter((item) => item.type === formValues.type);
-        }
-        return data;
+      query: async ({ page }, formValues) => {
+        return await getCrawlTaskListApi({
+          page: page.currentPage,
+          size: page.pageSize,
+          ...formValues,
+        });
       },
     },
   },
@@ -75,35 +71,59 @@ function onRefresh() {
   gridApi.query();
 }
 
-function onActionClick({ code, row }: OnActionClickParams) {
+function onActionClick({ code, row }: OnActionClickParams<CrawlTaskResult>) {
   switch (code) {
+    case 'delete': {
+      confirm({
+        icon: 'warning',
+        content: `确认删除任务「${row.name}」吗？`,
+      }).then(async () => {
+        gridApi.setLoading(true);
+        try {
+          await deleteCrawlTaskApi([row.id]);
+          message.success($t('ui.actionMessage.deleteSuccess', [row.name]));
+          onRefresh();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          gridApi.setLoading(false);
+        }
+      });
+      break;
+    }
     case 'start': {
       confirm({
         icon: 'success',
-        content: `确认启动爬虫「${row.name}」吗？`,
-      }).then(() => {
-        message.success(`爬虫「${row.name}」已启动`);
-        onRefresh();
+        content: `确认启动任务「${row.name}」吗？`,
+      }).then(async () => {
+        gridApi.setLoading(true);
+        try {
+          await startCrawlTaskApi(row.id);
+          message.success(`任务「${row.name}」已启动`);
+          onRefresh();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          gridApi.setLoading(false);
+        }
       });
       break;
     }
     case 'stop': {
       confirm({
         icon: 'warning',
-        content: `确认停止爬虫「${row.name}」吗？`,
-      }).then(() => {
-        message.success(`爬虫「${row.name}」已停止`);
-        onRefresh();
-      });
-      break;
-    }
-    case 'delete': {
-      confirm({
-        icon: 'warning',
-        content: `确认删除爬虫「${row.name}」吗？`,
-      }).then(() => {
-        message.success($t('ui.actionMessage.deleteSuccess', [row.name]));
-        onRefresh();
+        content: `确认停止任务「${row.name}」吗？`,
+      }).then(async () => {
+        gridApi.setLoading(true);
+        try {
+          await stopCrawlTaskApi(row.id);
+          message.success(`任务「${row.name}」已停止`);
+          onRefresh();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          gridApi.setLoading(false);
+        }
       });
       break;
     }

@@ -45,6 +45,10 @@
     "management": "Management",
     "analysis": "Data Analysis"
   },
+  "datasource": {
+    "title": "Datasource",
+    "management": "Datasource Config"
+  },
   "jobDashboard": {
     "title": "Job Data Analysis"
   },
