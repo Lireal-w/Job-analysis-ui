@@ -9,6 +9,7 @@ import { $t } from '@vben/locales';
 
 import { Graph } from '@antv/x6';
 import { useVbenForm } from '#/adapter/form';
+import { getAllDatasourceApi } from '#/api/datasource';
 import {
   getDataFlowApi,
   runDataFlowApi,
@@ -17,7 +18,13 @@ import {
 
 import { message } from 'antdv-next';
 
-import { ETL_NODE_TYPES, registerEtlNode, serializeGraph } from './node-defs';
+import {
+  deserializeToGraph,
+  ETL_NODE_TYPES,
+  getNodeConfigSummary,
+  registerEtlNode,
+  serializeGraph,
+} from './node-defs';
 
 registerEtlNode();
 
@@ -30,7 +37,9 @@ const flowInfo = ref<DataFlowResult | null>(null);
 const containerRef = ref<HTMLDivElement | null>(null);
 const graphRef = shallowRef<Graph | null>(null);
 const selectedNode = ref<any>(null);
-const previousPosition = ref<{ x: number; y: number } | null>(null);
+
+// 缓存从 API 加载的下拉选项
+const dynamicOptionsCache = ref<Record<string, { label: string; value: string }[]>>({});
 
 // 属性编辑表单
 const [ConfigForm, configFormApi] = useVbenForm({
@@ -39,7 +48,7 @@ const [ConfigForm, configFormApi] = useVbenForm({
   schema: [],
 });
 
-// 属性编辑弹窗
+// 构建节点类型查找 Map
 const nodeTypesMap = new Map(
   ETL_NODE_TYPES.map((t) => [`${t.type}-${t.label}`, t]),
 );
@@ -50,7 +59,7 @@ function getEtlTypeKey(node: any): string {
 }
 
 const [ConfigModal, configModalApi] = useVbenModal({
-  class: 'w-[480px]',
+  class: 'w-[520px]',
   title: '节点配置',
   destroyOnClose: true,
   onOpenChange(open) {
@@ -64,8 +73,35 @@ const [ConfigModal, configModalApi] = useVbenModal({
       const values = await configFormApi.getValues();
       const node = selectedNode.value;
       if (node) {
-        const data = node.getData() || {};
-        node.setData({ ...data, config: { ...(data.config || {}), ...values } });
+        const oldData = node.getData() || {};
+
+        // 将选中的数据源 ID 映射为名称用于节点显示
+        const enrichedValues = { ...values };
+        if (values.datasourceId) {
+          const dsList = dynamicOptionsCache.value['datasources'] || [];
+          const found = dsList.find((d) => d.value === String(values.datasourceId));
+          if (found) enrichedValues.datasourceName = found.label;
+        }
+        if (values.targetDatasourceId) {
+          const dsList = dynamicOptionsCache.value['datasources'] || [];
+          const found = dsList.find((d) => d.value === String(values.targetDatasourceId));
+          if (found) enrichedValues.targetDatasourceName = found.label;
+        }
+
+        node.setData({
+          ...oldData,
+          config: { ...(oldData.config || {}), ...enrichedValues },
+        });
+
+        // 更新节点显示信息（配置摘要）
+        const configSummary = getNodeConfigSummary({
+          etlType: oldData.etlType,
+          config: enrichedValues,
+        });
+        if (configSummary) {
+          node.attr('typeLabel/text', configSummary);
+        }
+
         message.success('节点配置已更新');
       }
       await configModalApi.close();
@@ -79,19 +115,44 @@ function openNodeConfig(node: any) {
   const def = nodeTypesMap.get(getEtlTypeKey(node));
   const fields = def?.configFields || [];
 
-  configFormApi.setSchema(
-    fields.map((f) => ({
-      component: f.type === 'textarea' ? 'Textarea' : f.type === 'switch' ? 'Switch' : f.type === 'select' ? 'Select' : 'Input',
-      fieldName: f.key,
-      label: f.label,
-      rules: f.required ? 'required' : undefined,
-      componentProps: f.options
-        ? {
-            options: f.options.map((o) => ({ label: o.label, value: o.value })),
-          }
-        : undefined,
-    })),
-  );
+  // 构建表单 schema，处理动态选项和条件显示
+  const newSchema = fields.map((f) => {
+      // 确定选项来源
+      let options = f.options || [];
+      if (f.dynamicOptions) {
+        options = dynamicOptionsCache.value[f.dynamicOptions] || [];
+      }
+
+      // 处理 hiddenIf
+      const isHidden = f.hiddenIf
+        ? (data.config || {})[f.hiddenIf.field] !== f.hiddenIf.value
+        : false;
+
+      return {
+        component:
+          f.type === 'textarea'
+            ? 'Textarea'
+            : f.type === 'switch'
+              ? 'Switch'
+              : f.type === 'select'
+                ? 'Select'
+                : 'Input',
+        fieldName: f.key,
+        label: f.label,
+        rules: f.required ? 'required' : undefined,
+        defaultValue: f.defaultValue,
+        componentProps: {
+          options: options.length > 0 ? options : undefined,
+          placeholder: f.placeholder,
+        },
+        // 动态隐藏（根据其他字段值）
+        ifShow: isHidden
+          ? ({ values }: any) => values[f.hiddenIf!.field] === f.hiddenIf!.value
+          : undefined,
+      };
+    });
+
+  configFormApi.setState({ schema: newSchema });
 
   const currentConfig = data.config || {};
   configFormApi.setValues(currentConfig);
@@ -193,24 +254,27 @@ async function loadFlow(graph: Graph) {
     if (data.nodes?.length || data.edges?.length) {
       deserializeToGraph(graph, data);
     } else {
+      // 空白流程：预置默认的 source + target 节点
       graph.addNode({
         shape: 'etl-node',
         x: 260,
-        y: 200,
+        y: 100,
         data: { etlType: 'source', icon: '🗄️', config: {} },
         attrs: {
-          label: { text: '数据源' },
-          typeLabel: { text: '数据源' },
+          label: { text: '数据库输入' },
+          typeLabel: { text: '从已有的数据源读取数据' },
+          headerBg: { fill: '#1677ff' },
         },
       });
       graph.addNode({
         shape: 'etl-node',
         x: 260,
-        y: 380,
+        y: 320,
         data: { etlType: 'target', icon: '💾', config: {} },
         attrs: {
           label: { text: '数据库输出' },
-          typeLabel: { text: '数据目标' },
+          typeLabel: { text: '写入目标数据库' },
+          headerBg: { fill: '#722ed1' },
         },
       });
     }
@@ -222,42 +286,17 @@ async function loadFlow(graph: Graph) {
   }
 }
 
-function deserializeToGraph(
-  graph: Graph,
-  data: { nodes?: Record<string, any>[]; edges?: Record<string, any>[] },
-) {
-  (data.nodes || []).forEach((nodeData: Record<string, any>) => {
-    const def = ETL_NODE_TYPES.find(
-      (t) => t.type === nodeData.type && t.label === nodeData.label,
-    );
-    graph.addNode({
-      shape: 'etl-node',
-      id: nodeData.id,
-      x: nodeData.x || 120,
-      y: nodeData.y || 120,
-      data: { etlType: nodeData.type, icon: nodeData.icon, config: nodeData.config || {} },
-      attrs: {
-        label: { text: nodeData.label },
-        typeLabel: { text: def?.description || '' },
-        headerBg: { fill: def?.color || '#1677ff' },
-      },
-    });
-  });
-
-  (data.edges || []).forEach((edgeData: Record<string, any>) => {
-    graph.addEdge({
-      id: edgeData.id,
-      source: edgeData.source,
-      target: edgeData.target,
-      attrs: {
-        line: {
-          stroke: '#1677ff',
-          strokeWidth: 2,
-          targetMarker: { name: 'classic', size: 8 },
-        },
-      },
-    });
-  });
+// 加载数据源选项（用于下拉选择）
+async function loadDatasourceOptions() {
+  try {
+    const res = await getAllDatasourceApi();
+    dynamicOptionsCache.value['datasources'] = res.map((ds) => ({
+      label: `${ds.name} (${ds.db_type}${ds.host ? ` - ${ds.host}` : ''})`,
+      value: String(ds.id),
+    }));
+  } catch (error) {
+    console.error('Failed to load datasources:', error);
+  }
 }
 
 // 从侧栏拖拽到画布
@@ -379,6 +418,7 @@ function goBack() {
 }
 
 onMounted(() => {
+  loadDatasourceOptions();
   setTimeout(initGraph, 100);
 });
 
