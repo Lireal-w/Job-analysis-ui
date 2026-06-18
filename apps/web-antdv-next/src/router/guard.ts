@@ -139,9 +139,11 @@ function setupAccessGuard(router: Router) {
     ) {
       for (const route of routes) {
         if (route.meta?.hideInMenu) {
+          const parent = parentName || 'Root';
+          // 检查父路由是否存在，不存在则直接挂到 Root 下
+          const parentExists = router.getRoutes().some((r) => r.name === parent);
           try {
-            const parent = parentName || 'Root';
-            router.addRoute(parent, route as any);
+            router.addRoute(parentExists ? parent : 'Root', route as any);
           } catch {
             // 路由已存在则跳过
           }
