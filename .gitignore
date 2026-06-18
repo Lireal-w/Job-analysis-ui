@@ -71,7 +71,7 @@ apps/web-antdv-next/src/views/_core/profile/base-setting.vue
 apps/web-antdv-next/src/views/_core/profile/notification-setting.vue
 apps/web-antdv-next/src/views/_core/profile/password-setting.vue
 apps/web-antdv-next/src/views/_core/profile/security-setting.vue
-docs
+# docs is tracked - see docs/gap-analysis.md
 playground
 scripts/deploy/build-local-docker-image.sh
 scripts/deploy/Dockerfile
@@ -79,3 +79,5 @@ scripts/deploy/Dockerfile
 README.*.md
 tea.yaml
 vben-admin.code-workspace
+
+blueprint.md
