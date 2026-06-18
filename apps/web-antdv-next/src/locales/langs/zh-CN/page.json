@@ -51,7 +51,8 @@
   },
   "etl": {
     "title": "数据加工",
-    "flow": "流程编排"
+    "flow": "流程编排",
+    "flowEditor": "流程编辑器"
   },
   "quality": {
     "title": "数据质量",

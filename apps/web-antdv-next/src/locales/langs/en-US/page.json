@@ -51,7 +51,8 @@
   },
   "etl": {
     "title": "Data Processing",
-    "flow": "Flow Editor"
+    "flow": "Flow Editor",
+    "flowEditor": "Flow Designer"
   },
   "quality": {
     "title": "Data Quality",

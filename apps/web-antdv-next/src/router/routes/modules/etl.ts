@@ -21,6 +21,16 @@ const routes: RouteRecordRaw[] = [
           icon: 'ant-design:apartment-outlined',
         },
       },
+      {
+        name: 'ETLFlowEditor',
+        path: '/etl/flow/editor/:id',
+        component: () => import('#/views/etl/flow/editor/index.vue'),
+        meta: {
+          title: $t('page.etl.flowEditor'),
+          icon: 'ant-design:edit-outlined',
+          hideInMenu: true,
+        },
+      },
     ],
   },
 ];
