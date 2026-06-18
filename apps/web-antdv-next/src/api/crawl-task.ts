@@ -104,65 +104,65 @@ export interface CrawlTaskDashboard {
 
 export async function getCrawlTaskDashboardApi() {
   return requestClient.get<CrawlTaskDashboard>(
-    '/api/v1/sys/crawl_task/dashboard',
+    '/api/v1/sys/crawl-tasks/dashboard',
   );
 }
 
 export async function getAllCrawlTaskApi() {
-  return requestClient.get<CrawlTaskResult[]>('/api/v1/sys/crawl_task/all');
+  return requestClient.get<CrawlTaskResult[]>('/api/v1/sys/crawl-tasks/all');
 }
 
 export async function getCrawlTaskListApi(params?: CrawlTaskParams) {
   return requestClient.get<PaginationResult<CrawlTaskResult>>(
-    '/api/v1/sys/crawl_task',
+    '/api/v1/sys/crawl-tasks',
     { params },
   );
 }
 
 export async function getCrawlTaskApi(pk: number) {
-  return requestClient.get<CrawlTaskResult>(`/api/v1/sys/crawl_task/${pk}`);
+  return requestClient.get<CrawlTaskResult>(`/api/v1/sys/crawl-tasks/${pk}`);
 }
 
 export async function createCrawlTaskApi(data: CreateCrawlTaskParams) {
-  return requestClient.post('/api/v1/sys/crawl_task', data);
+  return requestClient.post('/api/v1/sys/crawl-tasks', data);
 }
 
 export async function updateCrawlTaskApi(
   pk: number,
   data: CreateCrawlTaskParams,
 ) {
-  return requestClient.put(`/api/v1/sys/crawl_task/${pk}`, data);
+  return requestClient.put(`/api/v1/sys/crawl-tasks/${pk}`, data);
 }
 
 export async function updateCrawlTaskStatusApi(pk: number, status: string) {
-  return requestClient.put(`/api/v1/sys/crawl_task/${pk}/status`, { status });
+  return requestClient.put(`/api/v1/sys/crawl-tasks/${pk}/status`, { status });
 }
 
 export async function deleteCrawlTaskApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/crawl_task', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/crawl-tasks', { data: { pks } });
 }
 
 export async function startCrawlTaskApi(pk: number) {
-  return requestClient.post(`/api/v1/sys/crawl_task/${pk}/start`);
+  return requestClient.post(`/api/v1/sys/crawl-tasks/${pk}/start`);
 }
 
 export async function stopCrawlTaskApi(pk: number) {
-  return requestClient.post(`/api/v1/sys/crawl_task/${pk}/stop`);
+  return requestClient.post(`/api/v1/sys/crawl-tasks/${pk}/stop`);
 }
 
 export async function triggerCrawlTaskApi(pk: number) {
-  return requestClient.post(`/api/v1/sys/crawl_task/${pk}/trigger`);
+  return requestClient.post(`/api/v1/sys/crawl-tasks/${pk}/trigger`);
 }
 
 export async function getCrawlTaskLogsApi(pk: number, limit?: number) {
   return requestClient.get<CrawlTaskLogResult[]>(
-    `/api/v1/sys/crawl_task/${pk}/logs`,
+    `/api/v1/sys/crawl-tasks/${pk}/logs`,
     { params: { limit } },
   );
 }
 
 export async function getCrawlTaskLogDetailApi(logId: number) {
   return requestClient.get<CrawlTaskLogResult>(
-    `/api/v1/sys/crawl_task/logs/${logId}`,
+    `/api/v1/sys/crawl-tasks/logs/${logId}`,
   );
 }

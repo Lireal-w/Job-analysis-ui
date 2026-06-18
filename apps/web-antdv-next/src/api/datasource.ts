@@ -50,44 +50,44 @@ export interface DatasourceParams {
 }
 
 export async function getAllDatasourceApi() {
-  return requestClient.get<DatasourceResult[]>('/api/v1/sys/datasource/all');
+  return requestClient.get<DatasourceResult[]>('/api/v1/sys/datasources/all');
 }
 
 export async function getDatasourceListApi(params?: DatasourceParams) {
   return requestClient.get<PaginationResult<DatasourceResult>>(
-    '/api/v1/sys/datasource',
+    '/api/v1/sys/datasources',
     { params },
   );
 }
 
 export async function getDatasourceApi(pk: number) {
-  return requestClient.get<DatasourceResult>(`/api/v1/sys/datasource/${pk}`);
+  return requestClient.get<DatasourceResult>(`/api/v1/sys/datasources/${pk}`);
 }
 
 export async function testDatasourceConnectionApi(data: DatasourceTestParams) {
   return requestClient.post<{ message: string; success: boolean }>(
-    '/api/v1/sys/datasource/test-connection',
+    '/api/v1/sys/datasources/test-connection',
     data,
   );
 }
 
 export async function createDatasourceApi(data: CreateDatasourceParams) {
-  return requestClient.post('/api/v1/sys/datasource', data);
+  return requestClient.post('/api/v1/sys/datasources', data);
 }
 
 export async function updateDatasourceApi(
   pk: number,
   data: UpdateDatasourceParams,
 ) {
-  return requestClient.put(`/api/v1/sys/datasource/${pk}`, data);
+  return requestClient.put(`/api/v1/sys/datasources/${pk}`, data);
 }
 
 export async function updateDatasourceStatusApi(pk: number, status: number) {
-  return requestClient.put(`/api/v1/sys/datasource/${pk}/status`, undefined, {
+  return requestClient.put(`/api/v1/sys/datasources/${pk}/status`, undefined, {
     params: { status },
   });
 }
 
 export async function deleteDatasourceApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/datasource', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/datasources', { data: { pks } });
 }

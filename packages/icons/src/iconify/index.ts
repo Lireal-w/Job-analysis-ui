@@ -12,6 +12,10 @@ export const MaterialSymbolsDelete = createIconifyIcon(
   'material-symbols:delete',
 );
 
+export const MaterialSymbolsFolderOutline = createIconifyIcon(
+  'material-symbols:folder-outline',
+);
+
 export const MingcuteProfileLine = createIconifyIcon('mingcute:profile-line');
 
 export const MaterialIconThemePython = createIconifyIcon(
