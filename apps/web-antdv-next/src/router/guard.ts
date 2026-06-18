@@ -1,4 +1,4 @@
-import type { Router } from 'vue-router';
+import type { RouteRecordRaw, Router } from 'vue-router';
 
 import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
@@ -131,6 +131,30 @@ function setupAccessGuard(router: Router) {
         }
       });
     }
+
+    // 注册前端 hideInMenu 路由（后端模式不会自动注册隐藏路由）
+    function registerHiddenSubRoutes(
+      routes: RouteRecordRaw[],
+      parentName?: string,
+    ) {
+      for (const route of routes) {
+        if (route.meta?.hideInMenu) {
+          try {
+            const parent = parentName || 'Root';
+            router.addRoute(parent, route as any);
+          } catch {
+            // 路由已存在则跳过
+          }
+        }
+        if (route.children?.length) {
+          registerHiddenSubRoutes(
+            route.children,
+            route.name as string,
+          );
+        }
+      }
+    }
+    registerHiddenSubRoutes(accessRoutes);
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
         ? userInfo.homePath || preferences.app.defaultHomePath
