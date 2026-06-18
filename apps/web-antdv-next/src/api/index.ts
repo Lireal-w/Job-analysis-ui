@@ -5,6 +5,7 @@ export * from './data-permission';
 export * from './datasource';
 export * from './dataset';
 export * from './dept';
+export * from './file';
 export * from './job-dashboard';
 export * from './log';
 export * from './monitor';

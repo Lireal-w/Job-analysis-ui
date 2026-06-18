@@ -13,15 +13,6 @@ import { getPhoneCaptchaApi } from '#/plugins/aliyun_sms/api';
 import { getEmailCaptchaApi } from '#/plugins/email/api';
 import { DictEnum, getDictOptions } from '#/utils/dict';
 
-export const avatarSchema: VbenFormSchema[] = [
-  {
-    component: 'Textarea',
-    fieldName: 'avatar',
-    label: '头像链接',
-    rules: 'required',
-  },
-];
-
 export const nicknameSchema: VbenFormSchema[] = [
   {
     component: 'Input',

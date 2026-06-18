@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import type {
-  SysUpdateUserAvatarParams,
-  SysUpdateUserNicknameParams,
-} from '#/api';
+import type { SysUpdateUserNicknameParams } from '#/api';
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { preferences } from '@vben/preferences';
@@ -13,47 +10,43 @@ import { useUserStore } from '@vben/stores';
 import { message } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
-import { updateSysUserAvatarApi, updateSysUserNicknameApi } from '#/api';
+import {
+  updateSysUserAvatarApi,
+  updateSysUserNicknameApi,
+  uploadFileApi,
+} from '#/api';
 import { useAuthStore } from '#/store';
 
-import { avatarSchema, nicknameSchema } from './data';
+import { nicknameSchema } from './data';
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
 
-const [AvatarForm, avatarFormApi] = useVbenForm({
-  layout: 'vertical',
-  showDefaultActions: false,
-  schema: avatarSchema,
-});
+const uploading = ref(false);
 
-const [avatarModal, avatarModalApi] = useVbenModal({
-  destroyOnClose: true,
-  async onConfirm() {
-    const { valid } = await avatarFormApi.validate();
-    if (valid) {
-      avatarModalApi.lock();
-      const data = await avatarFormApi.getValues<SysUpdateUserAvatarParams>();
-      try {
-        await updateSysUserAvatarApi(data);
-        message.success('头像更新成功');
-        await avatarModalApi.close();
-        await authStore.fetchUserInfo();
-      } finally {
-        avatarModalApi.unlock();
-      }
+async function handleAvatarClick() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    uploading.value = true;
+    try {
+      const { url } = await uploadFileApi(file);
+      await updateSysUserAvatarApi({ avatar: url });
+      message.success('头像更新成功');
+      await authStore.fetchUserInfo();
+    } catch (error: any) {
+      console.error(error);
+      message.error(error?.message || '头像上传失败');
+    } finally {
+      uploading.value = false;
     }
-  },
-  onOpenChange(isOpen) {
-    if (isOpen) {
-      const data = avatarModalApi.getData();
-      avatarFormApi.resetForm();
-      if (data) {
-        avatarFormApi.setValues(data);
-      }
-    }
-  },
-});
+  };
+  input.click();
+}
 
 const [NicknameForm, nicknameFormApi] = useVbenForm({
   layout: 'vertical',
@@ -121,12 +114,12 @@ const basicInfoItems = computed(() => [
   <a-card title="基本信息" :styles="{ header: { borderBottom: 'none' } }">
     <div class="mb-8 mt-2 text-center">
       <a-tooltip>
-        <template #title>点击上传头像</template>
+        <template #title>{{ uploading ? '上传中...' : '点击上传头像' }}</template>
         <a-avatar
           class="cursor-pointer"
           :size="128"
           :src="userStore.userInfo?.avatar || preferences.app.defaultAvatar"
-          @click="avatarModalApi.setData(null).open()"
+          @click="handleAvatarClick"
         />
       </a-tooltip>
       <p class="mt-5 text-lg">
@@ -175,9 +168,6 @@ const basicInfoItems = computed(() => [
       最后登录时间：{{ userStore.userInfo?.last_login_time }}
     </template>
   </a-card>
-  <avatarModal title="更新头像">
-    <AvatarForm />
-  </avatarModal>
   <nicknameModal title="更新昵称">
     <NicknameForm />
   </nicknameModal>
