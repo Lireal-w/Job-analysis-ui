@@ -84,7 +84,7 @@ export function useColumns(
       title: $t('common.table.operation'),
       align: 'center',
       fixed: 'right',
-      width: 280,
+      width: 340,
       cellRender: {
         attrs: {
           nameField: 'name',
@@ -92,6 +92,10 @@ export function useColumns(
         },
         name: 'CellOperation',
         options: [
+          {
+            code: 'design',
+            text: '设计',
+          },
           'edit',
           {
             code: 'run',

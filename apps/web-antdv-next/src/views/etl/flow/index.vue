@@ -12,6 +12,7 @@ import type {
 } from '#/api';
 
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { confirm, Page, useVbenModal, VbenButton } from '@vben/common-ui';
 import { MaterialSymbolsAdd } from '@vben/icons';
@@ -32,6 +33,8 @@ import {
 
 import { querySchema, useColumns, useCreateSchema } from './data';
 
+const router = useRouter();
+
 const formOptions: VbenFormProps = {
   collapsed: true,
   showCollapseButton: true,
@@ -43,6 +46,10 @@ const formOptions: VbenFormProps = {
 
 function onActionClick({ code, row }: OnActionClickParams<DataFlowResult>) {
   switch (code) {
+    case 'design': {
+      router.push(`/etl/flow/editor/${row.id}`);
+      break;
+    }
     case 'delete': {
       confirm({
         icon: 'warning',
