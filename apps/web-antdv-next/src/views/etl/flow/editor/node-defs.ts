@@ -18,8 +18,15 @@ export interface EtlConfigField {
   label: string;
   type: 'input' | 'select' | 'textarea' | 'switch';
   required?: boolean;
+  /** 静态选项 */
   options?: { label: string; value: string }[];
+  /** 动态选项：从 API 加载时的 key 标识 */
+  dynamicOptions?: string;
   defaultValue?: string | boolean;
+  /** 当另一个字段等于某个值时隐藏 */
+  hiddenIf?: { field: string; value: string };
+  placeholder?: string;
+  help?: string;
 }
 
 import { Graph } from '@antv/x6';
@@ -131,24 +138,45 @@ export function registerEtlNode() {
 export const ETL_NODE_TYPES: EtlNodeMeta[] = [
   {
     type: 'source',
-    label: '数据源',
+    label: '数据库输入',
     icon: '🗄️',
     color: '#1677ff',
     bgColor: '#e6f4ff',
-    description: '从数据库、API 或文件读取数据',
+    description: '从已有的数据源读取数据',
     configFields: [
       {
-        key: 'datasource',
-        label: '数据源',
+        key: 'datasourceId',
+        label: '选择数据源',
         type: 'select',
         required: true,
-        defaultValue: '',
+        dynamicOptions: 'datasources',
+        placeholder: '请选择数据源',
+      },
+      {
+        key: 'sourceType',
+        label: '数据对象类型',
+        type: 'select',
+        required: true,
+        options: [
+          { label: '表/视图', value: 'table' },
+          { label: '自定义 SQL', value: 'sql' },
+        ],
+        defaultValue: 'table',
+      },
+      {
+        key: 'tableName',
+        label: '表名',
+        type: 'input',
+        required: true,
+        placeholder: '请输入表名或视图名',
+        hiddenIf: { field: 'sourceType', value: 'sql' },
       },
       {
         key: 'query',
         label: '查询语句',
         type: 'textarea',
-        defaultValue: '',
+        placeholder: 'SELECT * FROM ...',
+        hiddenIf: { field: 'sourceType', value: 'table' },
       },
     ],
   },
@@ -165,6 +193,7 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
         label: '接口地址',
         type: 'input',
         required: true,
+        placeholder: 'https://api.example.com/data',
       },
       {
         key: 'method',
@@ -176,6 +205,12 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
         ],
         defaultValue: 'GET',
       },
+      {
+        key: 'headers',
+        label: '请求头 (JSON)',
+        type: 'textarea',
+        placeholder: '{"Authorization": "Bearer xxx"}',
+      },
     ],
   },
   {
@@ -184,13 +219,20 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
     icon: '🔄',
     color: '#fa8c16',
     bgColor: '#fff7e6',
-    description: '映射和转换字段名称',
+    description: '映射和转换字段名称与类型',
     configFields: [
       {
-        key: 'mapping',
-        label: '映射规则',
+        key: 'mappingRules',
+        label: '映射规则 (JSON)',
         type: 'textarea',
-        defaultValue: '{}',
+        required: true,
+        placeholder: '[{"from":"old_name","to":"new_name","type":"string"}]',
+      },
+      {
+        key: 'dropUnmatched',
+        label: '丢弃未匹配字段',
+        type: 'switch',
+        defaultValue: true,
       },
     ],
   },
@@ -207,6 +249,7 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
         label: '过滤条件',
         type: 'input',
         required: true,
+        placeholder: '例如: age > 18 AND status = "active"',
       },
     ],
   },
@@ -223,19 +266,33 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
         label: '分组字段',
         type: 'input',
         required: true,
+        placeholder: '逗号分隔多个字段',
       },
       {
-        key: 'aggregate',
+        key: 'aggregateField',
+        label: '聚合字段',
+        type: 'input',
+        required: true,
+        placeholder: '例如: amount',
+      },
+      {
+        key: 'aggregateFunc',
         label: '聚合函数',
         type: 'select',
         options: [
-          { label: 'SUM', value: 'SUM' },
-          { label: 'AVG', value: 'AVG' },
-          { label: 'COUNT', value: 'COUNT' },
-          { label: 'MAX', value: 'MAX' },
-          { label: 'MIN', value: 'MIN' },
+          { label: 'SUM 求和', value: 'SUM' },
+          { label: 'AVG 平均值', value: 'AVG' },
+          { label: 'COUNT 计数', value: 'COUNT' },
+          { label: 'MAX 最大值', value: 'MAX' },
+          { label: 'MIN 最小值', value: 'MIN' },
         ],
         defaultValue: 'SUM',
+      },
+      {
+        key: 'alias',
+        label: '结果字段名',
+        type: 'input',
+        placeholder: '默认: aggregate_{field}',
       },
     ],
   },
@@ -245,7 +302,7 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
     icon: '🔗',
     color: '#fa8c16',
     bgColor: '#fff7e6',
-    description: '合并多个数据源',
+    description: '合并多个上游数据源',
     configFields: [
       {
         key: 'joinType',
@@ -255,9 +312,17 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
           { label: 'INNER JOIN', value: 'inner' },
           { label: 'LEFT JOIN', value: 'left' },
           { label: 'RIGHT JOIN', value: 'right' },
-          { label: 'UNION', value: 'union' },
+          { label: 'FULL JOIN', value: 'full' },
+          { label: 'UNION ALL', value: 'union_all' },
         ],
         defaultValue: 'inner',
+      },
+      {
+        key: 'joinKey',
+        label: '关联字段',
+        type: 'input',
+        placeholder: '用于 JOIN 的关联字段名',
+        help: '多个字段用逗号分隔',
       },
     ],
   },
@@ -270,21 +335,36 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
     description: '写入目标数据库',
     configFields: [
       {
+        key: 'targetDatasourceId',
+        label: '目标数据源',
+        type: 'select',
+        required: true,
+        dynamicOptions: 'datasources',
+        placeholder: '请选择目标数据源',
+      },
+      {
         key: 'targetTable',
-        label: '目标表',
+        label: '目标表名',
         type: 'input',
         required: true,
+        placeholder: '例如: dwd_sales_summary',
       },
       {
         key: 'writeMode',
         label: '写入模式',
         type: 'select',
         options: [
-          { label: '覆盖写入', value: 'overwrite' },
-          { label: '追加写入', value: 'append' },
-          { label: '增量更新', value: 'upsert' },
+          { label: '覆盖写入 (Overwrite)', value: 'overwrite' },
+          { label: '追加写入 (Append)', value: 'append' },
+          { label: '增量更新 (Upsert)', value: 'upsert' },
         ],
         defaultValue: 'append',
+      },
+      {
+        key: 'createTable',
+        label: '自动建表',
+        type: 'switch',
+        defaultValue: true,
       },
     ],
   },
@@ -304,6 +384,7 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
           { label: 'CSV', value: 'csv' },
           { label: 'JSON', value: 'json' },
           { label: 'Parquet', value: 'parquet' },
+          { label: 'Excel', value: 'xlsx' },
         ],
         defaultValue: 'csv',
       },
@@ -312,6 +393,19 @@ export const ETL_NODE_TYPES: EtlNodeMeta[] = [
         label: '输出路径',
         type: 'input',
         required: true,
+        placeholder: '/data/export/output',
+      },
+      {
+        key: 'fileName',
+        label: '文件名前缀',
+        type: 'input',
+        defaultValue: 'export',
+      },
+      {
+        key: 'withHeader',
+        label: '包含表头',
+        type: 'switch',
+        defaultValue: true,
       },
     ],
   },
@@ -345,7 +439,6 @@ export function serializeGraph(graph: any): {
         id: cell.id,
         source: cell.getSourceCellId(),
         target: cell.getTargetCellId(),
-        label: cell.getLabelAt(0)?.attrs?.label?.text || '',
       });
     }
   });
@@ -362,10 +455,11 @@ export function deserializeToGraph(
 ) {
   graph.clearCells();
 
-  const nodeMap = new Map<string, string>();
-
-  (data.nodes || []).forEach((nodeData) => {
-    const node = graph.addNode({
+  (data.nodes || []).forEach((nodeData: Record<string, any>) => {
+    const def = ETL_NODE_TYPES.find(
+      (t) => t.type === nodeData.type && t.label === nodeData.label,
+    );
+    graph.addNode({
       id: nodeData.id,
       shape: 'etl-node',
       x: nodeData.x || 120,
@@ -380,16 +474,16 @@ export function deserializeToGraph(
           text: nodeData.label || '节点',
         },
         typeLabel: {
-          text: getNodeTypeLabel(nodeData.type || 'transform'),
+          text: def?.description || getNodeTypeLabel(nodeData.type || 'transform'),
+        },
+        headerBg: {
+          fill: def?.color || '#1677ff',
         },
       },
     });
-    if (node) {
-      nodeMap.set(nodeData.id, node.id);
-    }
   });
 
-  (data.edges || []).forEach((edgeData) => {
+  (data.edges || []).forEach((edgeData: Record<string, any>) => {
     graph.addEdge({
       id: edgeData.id,
       source: edgeData.source,
@@ -398,11 +492,32 @@ export function deserializeToGraph(
         line: {
           stroke: '#1677ff',
           strokeWidth: 2,
-          targetMarker: 'classic',
+          targetMarker: { name: 'classic', size: 8 },
         },
       },
     });
   });
+}
+
+/**
+ * 根据节点配置获取显示文本（用于在节点上展示配置摘要）
+ */
+export function getNodeConfigSummary(nodeData: any): string {
+  const config = nodeData.config || {};
+  const etlType = nodeData.etlType || '';
+
+  if (etlType === 'source') {
+    return config.datasourceName || config.tableName || config.endpoint || '';
+  }
+  if (etlType === 'target') {
+    return config.targetDatasourceName
+      ? `${config.targetDatasourceName} → ${config.targetTable || ''}`
+      : config.targetTable || config.filePath || '';
+  }
+  if (etlType === 'transform') {
+    return config.condition || config.groupBy || config.joinType || '';
+  }
+  return '';
 }
 
 function getNodeTypeLabel(type: string): string {
