@@ -7,11 +7,16 @@ import { initStores } from '@vben/stores';
 import '@vben/styles';
 import '@vben/styles/antdv-next';
 
-// 绝区零风格样式
+// 绝区零风格样式 (默认)
 import './styles/zzz-global.css';
 import './styles/zzz-table.css';
 import './styles/zzz-menu.css';
 import './styles/zzz-animations.css';
+
+// 崩铁风格样式 (通过 data-ui-theme="hsr" 激活)
+import './styles/hsr-global.css';
+import './styles/hsr-table.css';
+import './styles/hsr-menu.css';
 
 import { useTitle } from '@vueuse/core';
 import Antd from 'antdv-next';
@@ -20,10 +25,14 @@ import { $t, setupI18n } from '#/locales';
 
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
+import { initUiTheme } from './composables/useAppTheme';
 import App from './app.vue';
 import { router } from './router';
 
 async function bootstrap(namespace: string) {
+  // 初始化 UI 主题 (从 localStorage 读取并设置 data-ui-theme)
+  initUiTheme();
+
   // 初始化组件适配器
   await initComponentAdapter();
 

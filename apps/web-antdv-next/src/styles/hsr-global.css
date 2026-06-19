@@ -1,0 +1,127 @@
+/* ==========================================================
+   崩坏：星穹铁道 (Honkai Star Rail) 风格全局样式覆盖
+   ========================================================== */
+
+[data-ui-theme='hsr'] {
+  /* 主背景 - 深空宇宙 */
+  --background: 225 30% 7%;
+  --background-deep: 225 35% 4%;
+  --foreground: 210 40% 93%;
+
+  /* 卡片/容器 */
+  --card: 225 25% 11%;
+  --card-foreground: 210 40% 93%;
+
+  /* 弹层 */
+  --popover: 225 25% 14%;
+  --popover-foreground: 210 40% 93%;
+
+  /* 主强调色 - 量子紫 */
+  --primary: 271 91% 65%;
+  --primary-foreground: 0 0% 98%;
+
+  /* 成功 - 丰饶绿 */
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 98%;
+
+  /* 警告 - 虚数金 */
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 98%;
+
+  /* 危险 - 毁灭红 */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* 信息 - 冰青蓝 */
+  --info: 199 89% 48%;
+  --info-foreground: 0 0% 98%;
+
+  /* 次级 */
+  --secondary: 225 20% 16%;
+  --secondary-foreground: 210 40% 93%;
+
+  /* 强调悬停 */
+  --accent: 225 20% 16%;
+  --accent-dark: 225 20% 20%;
+  --accent-darker: 225 20% 23%;
+  --accent-lighter: 225 20% 9%;
+  --accent-hover: 225 20% 20%;
+  --accent-foreground: 0 0% 93%;
+
+  /* 边框 - 暗星轨 */
+  --border: 225 18% 20%;
+  --input: 0 0% 100% / 8%;
+  --input-placeholder: 225 15% 40%;
+  --input-background: 0 0% 100% / 5%;
+
+  /* 圆角 - 崩铁偏圆润 */
+  --radius: 0.5rem;
+
+  /* 遮罩 */
+  --overlay: 0 0% 0% / 50%;
+  --overlay-content: 0 0% 0% / 40%;
+
+  /* 侧边栏 */
+  --sidebar: 225 30% 7%;
+  --sidebar-deep: 225 35% 4%;
+  --menu: var(--sidebar);
+
+  /* 顶栏 */
+  --header: 225 30% 7%;
+
+  /* muted */
+  --muted: 225 18% 14%;
+  --muted-foreground: 225 15% 50%;
+
+  /* heavy */
+  --heavy: 225 18% 17%;
+  --heavy-foreground: var(--accent-foreground);
+
+  color-scheme: dark;
+}
+
+/* ==========================================================
+   全局样式
+   ========================================================== */
+
+[data-ui-theme='hsr'] body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* 滚动条 - 星轨风格 */
+[data-ui-theme='hsr'] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+[data-ui-theme='hsr'] ::-webkit-scrollbar-track {
+  background: hsl(var(--background-deep));
+}
+
+[data-ui-theme='hsr'] ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+[data-ui-theme='hsr'] ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+  box-shadow: 0 0 8px hsla(271, 91%, 65%, 0.4);
+}
+
+/* ============================================================
+   崩铁风格渐变背景装饰
+   ============================================================ */
+
+[data-ui-theme='hsr'] .hsr-bg-universe {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(56, 189, 248, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(201, 169, 110, 0.03) 0%, transparent 70%),
+    hsl(var(--background));
+}

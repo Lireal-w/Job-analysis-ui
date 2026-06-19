@@ -1,0 +1,80 @@
+/* ==========================================================
+   崩铁风格 - 侧边栏菜单覆盖
+   ========================================================== */
+
+[data-ui-theme='hsr'] .ant-menu {
+  background: transparent !important;
+  border-right: 1px solid hsla(225, 18%, 20%, 0.5) !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item {
+  color: #8B92A8 !important;
+  margin: 4px 12px !important;
+  border-radius: 8px !important;
+  font-size: 14px;
+  font-weight: 400;
+  transition: all 0.2s ease !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item:hover {
+  color: #E8ECF1 !important;
+  background: hsla(271, 91%, 65%, 0.08) !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item-selected {
+  color: #E8ECF1 !important;
+  background: hsla(271, 91%, 65%, 0.12) !important;
+  position: relative;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item-selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: linear-gradient(180deg, hsl(var(--primary)), #7C3AED);
+  border-radius: 0 2px 2px 0;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item-selected::after {
+  display: none !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-item-active {
+  color: #E8ECF1 !important;
+}
+
+/* 子菜单标题 */
+[data-ui-theme='hsr'] .ant-menu-submenu-title {
+  color: #D0D8E8 !important;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+[data-ui-theme='hsr'] .ant-menu-submenu-title:hover {
+  color: #E8ECF1 !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-submenu-selected .ant-menu-submenu-title {
+  color: hsl(var(--primary)) !important;
+}
+
+/* 子菜单弹出 */
+[data-ui-theme='hsr'] .ant-menu-submenu-popup {
+  background: hsl(var(--popover)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 8px !important;
+}
+
+[data-ui-theme='hsr'] .ant-menu-sub {
+  background: transparent !important;
+}
+
+/* 菜单图标 */
+[data-ui-theme='hsr'] .ant-menu-item .ant-menu-item-icon,
+[data-ui-theme='hsr'] .ant-menu-submenu-title .ant-menu-item-icon {
+  font-size: 16px !important;
+}

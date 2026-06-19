@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
 
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
@@ -21,6 +21,8 @@ import { openWindow } from '@vben/utils';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
+
+import { getCurrentUiTheme, toggleUiTheme } from '#/composables/useAppTheme';
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -80,6 +82,17 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
+
+// UI 主题切换
+const currentUiTheme = ref(getCurrentUiTheme());
+
+function handleToggleTheme() {
+  const next = toggleUiTheme();
+  currentUiTheme.value = next;
+  // 刷新页面以应用新的 AntDV token
+  window.location.reload();
+}
+
 const showDot = computed(() =>
   notifications.value.some((item) => !item.isRead),
 );
@@ -118,6 +131,11 @@ const menus = computed(() => [
     },
     icon: CircleHelp,
     text: $t('ui.widgets.qa'),
+  },
+  {
+    handler: handleToggleTheme,
+    icon: 'lucide:palette',
+    text: `UI: ${currentUiTheme.value === 'zzz' ? 'ZZZ' : 'HSR'}`,
   },
 ]);
 
