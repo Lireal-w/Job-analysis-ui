@@ -203,13 +203,13 @@ onMounted(() => {
   <Page auto-content-height>
     <div class="flex h-full gap-4">
       <!-- Sidebar: Data Layer Tree -->
-      <div class="w-56 shrink-0 overflow-auto rounded-lg bg-white p-3 dark:bg-card">
-        <h3 class="mb-3 text-sm font-medium text-gray-600 dark:text-gray-400">数据分层</h3>
+      <div class="w-56 shrink-0 overflow-auto rounded-lg bg-card p-3">
+        <h3 class="mb-3 text-sm font-medium text-muted-foreground">数据分层</h3>
         <ul class="space-y-1">
           <li>
             <a
               class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
-              :class="selectedLayerId === null ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-accent'"
+              :class="selectedLayerId === null ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
               @click="onLayerSelect(null)"
             >
               <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
@@ -219,7 +219,7 @@ onMounted(() => {
           <li v-for="layer in layers" :key="layer.id">
             <a
               class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
-              :class="selectedLayerId === layer.id ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-accent'"
+              :class="selectedLayerId === layer.id ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
               @click="onLayerSelect(layer.id)"
             >
               <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
