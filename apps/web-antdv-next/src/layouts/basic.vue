@@ -24,6 +24,8 @@ import LoginForm from '#/views/_core/authentication/login.vue';
 
 import { getCurrentUiTheme, toggleUiTheme } from '#/composables/useAppTheme';
 
+import AIAssistant from '#/views/_core/ai-assistant/index.vue';
+
 const notifications = ref<NotificationItem[]>([
   {
     id: 1,
@@ -251,4 +253,5 @@ watch(
       <LockScreen :avatar @to-login="handleLogout" />
     </template>
   </BasicLayout>
+  <AIAssistant />
 </template>

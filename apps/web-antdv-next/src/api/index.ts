@@ -1,4 +1,5 @@
 export * from './core';
+export * from './ai';
 export * from './crawl-task';
 export * from './data-flow';
 export * from './data-permission';
