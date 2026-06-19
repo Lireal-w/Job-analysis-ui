@@ -7,6 +7,12 @@ import { initStores } from '@vben/stores';
 import '@vben/styles';
 import '@vben/styles/antdv-next';
 
+// 绝区零风格样式
+import './styles/zzz-global.css';
+import './styles/zzz-table.css';
+import './styles/zzz-menu.css';
+import './styles/zzz-animations.css';
+
 import { useTitle } from '@vueuse/core';
 import Antd from 'antdv-next';
 

@@ -6,6 +6,7 @@ import { preferences, usePreferences } from '@vben/preferences';
 
 import { App, ConfigProvider, theme } from 'antdv-next';
 
+import { zzzTheme } from '#/theme/zzz-theme';
 import { antdLocale } from '#/locales';
 
 defineOptions({ name: 'App' });
@@ -25,7 +26,10 @@ const tokenTheme = computed(() => {
 
   return {
     algorithm,
-    token: tokens,
+    token: {
+      ...tokens,
+      ...zzzTheme.token,
+    },
   };
 });
 
@@ -41,6 +45,8 @@ watch(
 <template>
   <ConfigProvider :locale="antdLocale" :theme="tokenTheme">
     <App>
+      <!-- 全局背景装饰 -->
+      <div class="zzz-bg-glow"></div>
       <RouterView />
     </App>
   </ConfigProvider>

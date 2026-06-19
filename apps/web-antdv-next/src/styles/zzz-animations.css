@@ -1,0 +1,94 @@
+/* ==========================================================
+   绝区零风格 - 动效与动画
+   ========================================================== */
+
+/* 霓虹渐变边框动画 */
+@keyframes neon-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 扫描线动画 */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* 故障文字动画 - 1 */
+@keyframes glitch-anim-1 {
+  0% { clip: rect(20px, 9999px, 15px, 0); }
+  20% { clip: rect(50px, 9999px, 80px, 0); }
+  40% { clip: rect(10px, 9999px, 60px, 0); }
+  60% { clip: rect(70px, 9999px, 30px, 0); }
+  80% { clip: rect(40px, 9999px, 90px, 0); }
+  100% { clip: rect(60px, 9999px, 20px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(60px, 9999px, 90px, 0); }
+  20% { clip: rect(10px, 9999px, 50px, 0); }
+  40% { clip: rect(80px, 9999px, 20px, 0); }
+  60% { clip: rect(30px, 9999px, 70px, 0); }
+  80% { clip: rect(90px, 9999px, 40px, 0); }
+  100% { clip: rect(20px, 9999px, 60px, 0); }
+}
+
+/* 标题闪烁动画 */
+@keyframes title-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+  52% { opacity: 0.5; }
+  54% { opacity: 1; }
+  90% { opacity: 1; }
+  92% { opacity: 0.3; }
+  94% { opacity: 1; }
+}
+
+/* 呼吸发光 */
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* 脉冲 */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 107, 53, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4); }
+}
+
+/* 故障按钮动画 */
+@keyframes glitch-btn {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+/* ============================================================
+   实用动画类
+   ============================================================ */
+
+.zzz-anim-scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.08) 50%
+  );
+  background-size: 100% 4px;
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
+
+.zzz-anim-breathe {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+.zzz-anim-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

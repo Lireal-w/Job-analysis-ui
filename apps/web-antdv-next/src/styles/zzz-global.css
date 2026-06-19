@@ -1,0 +1,212 @@
+/* ==========================================================
+   绝区零 (Zenless Zone Zero) 风格全局样式覆盖
+   ========================================================== */
+
+/* ZZZ 色彩变量覆盖 - Light 主题 */
+:root,
+.light,
+.light[data-theme='custom'],
+.light[data-theme='default'] {
+  /* 主背景 - 深色基调 */
+  --background: 240 6% 7%;
+  --background-deep: 240 8% 4%;
+  --foreground: 0 0% 91%;
+
+  /* 卡片/容器 */
+  --card: 240 5% 10%;
+  --card-foreground: 0 0% 91%;
+
+  /* 弹层 */
+  --popover: 240 5% 12%;
+  --popover-foreground: 0 0% 91%;
+
+  /* 主强调色 - 霓虹橙 */
+  --primary: 18 100% 58%;
+  --primary-foreground: 0 0% 98%;
+
+  /* 成功 - 霓虹青绿 */
+  --success: 162 100% 45%;
+  --success-foreground: 0 0% 98%;
+
+  /* 警告 - 亮黄 */
+  --warning: 42 100% 62%;
+  --warning-foreground: 0 0% 98%;
+
+  /* 危险 - 霓虹粉红 */
+  --destructive: 348 100% 59%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* 信息 - 霓虹青 */
+  --info: 172 100% 42%;
+  --info-foreground: 0 0% 98%;
+
+  /* 次级 */
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 91%;
+
+  /* 强调悬停 */
+  --accent: 240 4% 16%;
+  --accent-dark: 240 4% 20%;
+  --accent-darker: 240 4% 24%;
+  --accent-lighter: 240 4% 10%;
+  --accent-hover: 240 4% 20%;
+  --accent-foreground: 0 0% 91%;
+
+  /* 边框 */
+  --border: 240 4% 20%;
+  --input: 0 0% 100% / 10%;
+  --input-placeholder: 240 4% 40%;
+  --input-background: 0 0% 100% / 5%;
+
+  /* 圆角 - 硬朗风格 */
+  --radius: 0.25rem;
+
+  /* 遮罩 */
+  --overlay: 0 0% 0% / 50%;
+  --overlay-content: 0 0% 0% / 40%;
+
+  /*  侧边栏 */
+  --sidebar: 240 6% 7%;
+  --sidebar-deep: 240 8% 4%;
+  --menu: var(--sidebar);
+
+  /* 顶栏 */
+  --header: 240 6% 7%;
+
+  /* muted */
+  --muted: 240 4% 14%;
+  --muted-foreground: 240 4% 50%;
+
+  /* heavy */
+  --heavy: 240 4% 18%;
+  --heavy-foreground: var(--accent-foreground);
+
+  color-scheme: dark;
+}
+
+/* Dark 主题 - 与 Light 一致，ZZZ 风格始终保持深色基调 */
+.dark,
+.dark[data-theme='custom'],
+.dark[data-theme='default'] {
+  --background: 240 6% 7%;
+  --background-deep: 240 8% 4%;
+  --foreground: 0 0% 91%;
+
+  --card: 240 5% 10%;
+  --card-foreground: 0 0% 91%;
+
+  --popover: 240 5% 12%;
+  --popover-foreground: 0 0% 91%;
+
+  --primary: 18 100% 58%;
+  --primary-foreground: 0 0% 98%;
+
+  --success: 162 100% 45%;
+  --success-foreground: 0 0% 98%;
+
+  --warning: 42 100% 62%;
+  --warning-foreground: 0 0% 98%;
+
+  --destructive: 348 100% 59%;
+  --destructive-foreground: 0 0% 98%;
+
+  --info: 172 100% 42%;
+  --info-foreground: 0 0% 98%;
+
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 91%;
+
+  --accent: 240 4% 16%;
+  --accent-dark: 240 4% 20%;
+  --accent-darker: 240 4% 24%;
+  --accent-lighter: 240 4% 10%;
+  --accent-hover: 240 4% 20%;
+  --accent-foreground: 0 0% 91%;
+
+  --border: 240 4% 20%;
+  --input: 0 0% 100% / 10%;
+  --input-placeholder: 240 4% 40%;
+  --input-background: 0 0% 100% / 5%;
+
+  --radius: 0.25rem;
+
+  --overlay: 0 0% 0% / 50%;
+  --overlay-content: 0 0% 0% / 40%;
+
+  --sidebar: 240 6% 7%;
+  --sidebar-deep: 240 8% 4%;
+  --menu: var(--sidebar);
+  --header: 240 6% 7%;
+
+  --muted: 240 4% 14%;
+  --muted-foreground: 240 4% 50%;
+
+  --heavy: 240 4% 18%;
+  --heavy-foreground: var(--accent-foreground);
+
+  color-scheme: dark;
+}
+
+/* ==========================================================
+   全局样式
+   ========================================================== */
+
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background-deep));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* ============================================================
+   绝区零风格渐变背景装饰
+   ============================================================ */
+.zzz-bg-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255, 107, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(0, 212, 170, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 45, 85, 0.03) 0%, transparent 50%);
+}
+
+/* 网格背景 */
+.zzz-bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 107, 53, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* 霓虹发光效果类 */
+.zzz-glow-orange {
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.5), 0 0 20px rgba(255, 107, 53, 0.3);
+}
+
+.zzz-glow-cyan {
+  box-shadow: 0 0 10px rgba(0, 212, 170, 0.5), 0 0 20px rgba(0, 212, 170, 0.3);
+}
+
+.zzz-glow-pink {
+  box-shadow: 0 0 10px rgba(255, 45, 85, 0.5), 0 0 20px rgba(255, 45, 85, 0.3);
+}
