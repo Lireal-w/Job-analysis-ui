@@ -215,7 +215,13 @@ watch(() => queryResult.value, (val) => {
       minWidth: 120,
       showOverflow: true,
     }));
-    resultData.value = val.rows.map((row, idx) => ({ ...row, _row_key: idx }));
+    resultData.value = val.rows.map((row: any[], idx: number) => {
+      const obj: Record<string, any> = { _row_key: idx };
+      val.columns.forEach((col: string, ci: number) => {
+        obj[col] = row[ci];
+      });
+      return obj;
+    });
   } else {
     resultColumns.value = [];
     resultData.value = [];
