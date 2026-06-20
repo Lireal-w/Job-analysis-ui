@@ -42,12 +42,6 @@ const successRate = computed(() => {
   );
 });
 
-const failRate = computed(() => {
-  const total = dashboard.value.totalTasks;
-  if (total === 0) return '0%';
-  return ((dashboard.value.failedTasks / total) * 100).toFixed(1) + '%';
-});
-
 const activePercent = computed(() => {
   const total = dashboard.value.totalTasks;
   if (total === 0) return '0%';
@@ -60,7 +54,14 @@ async function loadDashboard() {
   dashboardLoading.value = true;
   try {
     const data = await getCrawlTaskDashboardApi();
-    dashboard.value = data;
+    // API 返回 snake_case，映射为 camelCase
+    dashboard.value = {
+      totalTasks: data.total_tasks ?? 0,
+      activeTasks: data.active_tasks ?? 0,
+      completedTasks: data.completed_tasks ?? 0,
+      failedTasks: data.failed_tasks ?? 0,
+      totalRecords: data.total_records ?? 0,
+    };
   } catch (error) {
     console.error('Failed to load dashboard:', error);
   } finally {
