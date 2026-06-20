@@ -7,6 +7,7 @@ import {
   VbenButton,
 } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { VxeGrid } from 'vxe-table';
 
 import { message } from 'antdv-next';
 
@@ -363,7 +364,7 @@ watch(() => queryResult.value, (val) => {
               查询执行成功，但未返回任何数据
             </div>
             <div v-else class="p-2">
-              <vxe-table
+              <VxeGrid
                 :column-config="{ resizable: true }"
                 :data="resultData"
                 :columns="resultColumns"
