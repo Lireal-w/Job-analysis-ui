@@ -8,7 +8,7 @@ import type {
 } from '#/adapter/vxe-table';
 import type { CrawlTaskResult } from '#/api';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -151,8 +151,8 @@ const detailItems = computed(() => {
   const d = currentRecord.value;
   if (!d) return [];
   return [
-    { key: 'name', label: '任务名称', content: d.name },
     { key: 'id', label: '任务 ID', content: d.id, span: 2 },
+    { key: 'name', label: '任务名称', content: d.name },
     { key: 'crawl_mode', label: '采集模式' },
     { key: 'status', label: '状态' },
     {
@@ -178,10 +178,33 @@ const detailItems = computed(() => {
       key: 'created_time',
       label: $t('common.table.created_time'),
       content: d.created_time,
-      span: 2,
     },
   ];
 });
+
+const logColumns = computed(() => [
+  { title: '运行 ID', dataIndex: 'run_id', width: 180, ellipsis: true },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    width: 80,
+    customRender: ({ text }: { text: string }) => {
+      const color = text === 'completed' ? 'success' : text === 'running' ? 'processing' : 'error';
+      const label = text === 'completed' ? '成功' : text === 'running' ? '运行中' : '失败';
+      return h('a-tag', { color }, label);
+    },
+  },
+  { title: '采集数', dataIndex: 'total_scraped', width: 70 },
+  { title: '成功', dataIndex: 'total_succeeded', width: 70 },
+  { title: '失败', dataIndex: 'total_failed', width: 70 },
+  {
+    title: '耗时(秒)',
+    dataIndex: 'duration',
+    width: 90,
+    customRender: ({ record }: { record: any }) => record.duration ?? '-',
+  },
+  { title: '开始时间', dataIndex: 'start_time', width: 168 },
+]);
 
 onMounted(() => {
   loadDashboard();
@@ -299,46 +322,8 @@ onMounted(() => {
           :pagination="false"
           size="small"
           row-key="id"
-        >
-          <a-table-column
-            title="运行 ID"
-            data-index="run_id"
-            :width="180"
-            ellipsis
-          />
-          <a-table-column title="状态" data-index="status" :width="80">
-            <template #default="{ text }">
-              <a-tag
-                :color="
-                  text === 'completed'
-                    ? 'success'
-                    : text === 'running'
-                      ? 'processing'
-                      : 'error'
-                "
-              >
-                {{ text === 'completed' ? '成功' : text === 'running' ? '运行中' : '失败' }}
-              </a-tag>
-            </template>
-          </a-table-column>
-          <a-table-column
-            title="采集数"
-            data-index="total_scraped"
-            :width="70"
-          />
-          <a-table-column
-            title="成功"
-            data-index="total_succeeded"
-            :width="70"
-          />
-          <a-table-column title="失败" data-index="total_failed" :width="70" />
-          <a-table-column title="耗时(秒)" :width="90">
-            <template #default="{ record }">
-              {{ record.duration ?? '-' }}
-            </template>
-          </a-table-column>
-          <a-table-column title="开始时间" data-index="start_time" :width="168" />
-        </a-table>
+          :columns="logColumns"
+        />
       </template>
     </Drawer>
   </Page>
