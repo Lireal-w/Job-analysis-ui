@@ -139,7 +139,10 @@ export async function updateCrawlTaskStatusApi(pk: number, status: string) {
 }
 
 export async function deleteCrawlTaskApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/crawl-tasks', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/crawl-tasks', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function startCrawlTaskApi(pk: number) {
