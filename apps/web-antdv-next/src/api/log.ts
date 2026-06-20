@@ -57,7 +57,10 @@ export async function getLoginLogListApi(params: LoginLogParams) {
 }
 
 export async function deleteLoginLogApi(pks: number[]) {
-  return requestClient.delete('/api/v1/logs/login', { data: { pks } });
+  return requestClient.delete('/api/v1/logs/login', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function getOperaLogListApi(params: OperaLogParams) {
@@ -68,5 +71,8 @@ export async function getOperaLogListApi(params: OperaLogParams) {
 }
 
 export async function deleteOperaLogApi(pks: number[]) {
-  return requestClient.delete('/api/v1/logs/opera', { data: { pks } });
+  return requestClient.delete('/api/v1/logs/opera', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }

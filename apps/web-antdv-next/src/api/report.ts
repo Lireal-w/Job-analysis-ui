@@ -82,7 +82,10 @@ export async function updateReportApi(pk: number, data: UpdateReportParams) {
 }
 
 export async function deleteReportApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/reports', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/reports', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function previewReportApi(pk: number) {

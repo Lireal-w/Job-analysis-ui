@@ -96,5 +96,8 @@ export async function updateSavedQueryApi(pk: number, data: UpdateSavedQueryPara
 }
 
 export async function deleteSavedQueryApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/query/saved', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/query/saved', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }

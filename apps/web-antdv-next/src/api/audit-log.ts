@@ -36,7 +36,10 @@ export async function getAuditLogDetailApi(pk: number) {
   return requestClient.get<AuditLogResult>(`/api/v1/log/audit-logs/${pk}`);
 }
 export async function deleteAuditLogApi(pks: number[]) {
-  return requestClient.delete('/api/v1/log/audit-logs', { data: { pks } });
+  return requestClient.delete('/api/v1/log/audit-logs', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 export async function clearAuditLogApi() {
   return requestClient.delete('/api/v1/log/audit-logs/all');

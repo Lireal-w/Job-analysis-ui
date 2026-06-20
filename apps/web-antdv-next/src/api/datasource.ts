@@ -89,5 +89,8 @@ export async function updateDatasourceStatusApi(pk: number, status: number) {
 }
 
 export async function deleteDatasourceApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/datasources', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/datasources', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }

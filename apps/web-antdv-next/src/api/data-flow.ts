@@ -67,7 +67,10 @@ export async function updateDataFlowApi(pk: number, data: UpdateDataFlowParams) 
 }
 
 export async function deleteDataFlowApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/data-flows', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/data-flows', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function publishDataFlowApi(pk: number) {

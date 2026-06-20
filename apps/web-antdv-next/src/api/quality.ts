@@ -76,7 +76,10 @@ export async function updateQualityRuleApi(pk: number, data: UpdateQualityRulePa
 }
 
 export async function deleteQualityRuleApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/data-quality/rules', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/data-quality/rules', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function runQualityCheckApi(pk: number) {

@@ -63,7 +63,10 @@ export async function updateAlertRuleApi(pk: number, data: UpdateAlertRuleParams
   return requestClient.put(`/api/v1/monitor/alerts/rules/${pk}`, data);
 }
 export async function deleteAlertRuleApi(pks: number[]) {
-  return requestClient.delete('/api/v1/monitor/alerts/rules', { data: { pks } });
+  return requestClient.delete('/api/v1/monitor/alerts/rules', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 export async function getAlertHistoryApi(params?: { rule_id?: number; severity?: string; status?: string; page?: number; size?: number }) {
   return requestClient.get<PaginationResult<AlertHistoryResult>>('/api/v1/monitor/alerts/history', { params });

@@ -72,7 +72,10 @@ export async function updateDataLayerApi(pk: number, data: Partial<{ name: strin
 }
 
 export async function deleteDataLayerApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/data-storage/layers', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/data-storage/layers', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
 
 export async function getAllDatasetApi() {
@@ -96,5 +99,8 @@ export async function updateDatasetApi(pk: number, data: UpdateDatasetParams) {
 }
 
 export async function deleteDatasetApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/data-storage/datasets', { data: { pks } });
+  return requestClient.delete('/api/v1/sys/data-storage/datasets', {
+    params: { pks },
+    paramsSerializer: 'repeat',
+  });
 }
