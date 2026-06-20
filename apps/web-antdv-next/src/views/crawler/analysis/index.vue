@@ -13,8 +13,6 @@ import { computed, onMounted, ref } from 'vue';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'antdv-next';
-
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   getAllCrawlTaskApi,
@@ -27,40 +25,27 @@ import { querySchema, useColumns } from './data';
 // 仪表盘统计
 const dashboardLoading = ref(true);
 const dashboard = ref({
-  totalTasks: 0,
-  activeTasks: 0,
-  completedTasks: 0,
-  failedTasks: 0,
+  total: 0,
+  running: 0,
+  stopped: 0,
+  paused: 0,
+  error: 0,
   totalRecords: 0,
-});
-
-const successRate = computed(() => {
-  const total = dashboard.value.totalTasks;
-  if (total === 0) return '0%';
-  return (
-    ((dashboard.value.completedTasks / total) * 100).toFixed(1) + '%'
-  );
-});
-
-const activePercent = computed(() => {
-  const total = dashboard.value.totalTasks;
-  if (total === 0) return '0%';
-  return (
-    ((dashboard.value.activeTasks / total) * 100).toFixed(1) + '%'
-  );
+  totalRuns: 0,
 });
 
 async function loadDashboard() {
   dashboardLoading.value = true;
   try {
     const data = await getCrawlTaskDashboardApi();
-    // API 返回 snake_case，映射为 camelCase
     dashboard.value = {
-      totalTasks: data.total_tasks ?? 0,
-      activeTasks: data.active_tasks ?? 0,
-      completedTasks: data.completed_tasks ?? 0,
-      failedTasks: data.failed_tasks ?? 0,
+      total: data.total ?? 0,
+      running: data.running ?? 0,
+      stopped: data.stopped ?? 0,
+      paused: data.paused ?? 0,
+      error: data.error ?? 0,
       totalRecords: data.total_records ?? 0,
+      totalRuns: data.total_runs ?? 0,
     };
   } catch (error) {
     console.error('Failed to load dashboard:', error);
@@ -210,7 +195,7 @@ onMounted(() => {
       <a-card>
         <a-statistic
           title="总任务数"
-          :value="dashboard.totalTasks"
+          :value="dashboard.total"
           :value-style="{ color: '#1890ff' }"
           :loading="dashboardLoading"
         >
@@ -221,11 +206,11 @@ onMounted(() => {
       </a-card>
       <a-card>
         <a-statistic
-          title="进行中"
-          :value="dashboard.activeTasks"
-          :value-style="{ color: '#1890ff' }"
+          title="运行中"
+          :value="dashboard.running"
+          :value-style="{ color: '#52c41a' }"
           :loading="dashboardLoading"
-          :suffix="`/ ${dashboard.totalTasks}`"
+          :suffix="`/ ${dashboard.total}`"
         >
           <template #prefix>
             <span class="icon-[ant-design--play-circle-outlined] mr-1" />
@@ -234,13 +219,13 @@ onMounted(() => {
       </a-card>
       <a-card>
         <a-statistic
-          title="成功率"
-          :value="successRate"
-          :value-style="{ color: '#52c41a' }"
+          title="执行次数"
+          :value="dashboard.totalRuns"
+          :value-style="{ color: '#722ed1' }"
           :loading="dashboardLoading"
         >
           <template #prefix>
-            <span class="icon-[ant-design--check-circle-outlined] mr-1" />
+            <span class="icon-[ant-design--thunderbolt-outlined] mr-1" />
           </template>
         </a-statistic>
       </a-card>

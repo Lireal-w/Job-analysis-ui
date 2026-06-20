@@ -95,11 +95,13 @@ export interface CrawlTaskParams {
 }
 
 export interface CrawlTaskDashboard {
-  total_tasks: number;
-  active_tasks: number;
-  completed_tasks: number;
-  failed_tasks: number;
+  total: number;
+  running: number;
+  stopped: number;
+  paused: number;
+  error: number;
   total_records: number;
+  total_runs: number;
 }
 
 export async function getCrawlTaskDashboardApi() {
