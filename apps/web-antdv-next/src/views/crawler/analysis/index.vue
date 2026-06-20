@@ -228,7 +228,7 @@ onMounted(() => {
           :suffix="`/ ${dashboard.totalTasks}`"
         >
           <template #prefix>
-            <span class="icon-[ant-design--loading-outlined] mr-1" />
+            <span class="icon-[ant-design--play-circle-outlined] mr-1" />
           </template>
         </a-statistic>
       </a-card>
