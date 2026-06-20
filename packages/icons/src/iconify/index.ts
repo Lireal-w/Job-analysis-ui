@@ -16,6 +16,14 @@ export const MaterialSymbolsFolderOutline = createIconifyIcon(
   'material-symbols:folder-outline',
 );
 
+export const MaterialSymbolsSettingsOutline = createIconifyIcon(
+  'material-symbols:settings-outline',
+);
+
+export const MaterialSymbolsLayersOutline = createIconifyIcon(
+  'material-symbols:layers-outline',
+);
+
 export const MingcuteProfileLine = createIconifyIcon('mingcute:profile-line');
 
 export const MaterialIconThemePython = createIconifyIcon(

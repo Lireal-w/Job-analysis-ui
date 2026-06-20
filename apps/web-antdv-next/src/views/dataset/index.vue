@@ -12,6 +12,7 @@ import type {
 } from '#/api';
 
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import {
   confirm,
@@ -22,6 +23,7 @@ import {
 import {
   MaterialSymbolsAdd,
   MaterialSymbolsFolderOutline,
+  MaterialSymbolsSettingsOutline,
 } from '@vben/icons';
 import { $t } from '@vben/locales';
 
@@ -173,6 +175,8 @@ const [Modal, modalApi] = useVbenModal({
 
 // Data layer tree
 const layers = ref<Array<{ id: number; name: string; layer_type: string; description: string | null }>>([]);
+
+const router = useRouter();
 const selectedLayerId = ref<number | null>(null);
 
 async function loadLayers() {
@@ -203,30 +207,41 @@ onMounted(() => {
   <Page auto-content-height>
     <div class="flex h-full gap-4">
       <!-- Sidebar: Data Layer Tree -->
-      <div class="w-56 shrink-0 overflow-auto rounded-lg bg-card p-3">
-        <h3 class="mb-3 text-sm font-medium text-muted-foreground">数据分层</h3>
-        <ul class="space-y-1">
-          <li>
-            <a
-              class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
-              :class="selectedLayerId === null ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
-              @click="onLayerSelect(null)"
-            >
-              <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
-              全部
-            </a>
-          </li>
-          <li v-for="layer in layers" :key="layer.id">
-            <a
-              class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
-              :class="selectedLayerId === layer.id ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
-              @click="onLayerSelect(layer.id)"
-            >
-              <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
-              {{ layer.name || layer.layer_type }}
-            </a>
-          </li>
-        </ul>
+      <div class="flex w-56 shrink-0 flex-col overflow-auto rounded-lg bg-card p-3">
+        <div class="flex-1">
+          <h3 class="mb-3 text-sm font-medium text-muted-foreground">数据分层</h3>
+          <ul class="space-y-1">
+            <li>
+              <a
+                class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                :class="selectedLayerId === null ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
+                @click="onLayerSelect(null)"
+              >
+                <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
+                全部
+              </a>
+            </li>
+            <li v-for="layer in layers" :key="layer.id">
+              <a
+                class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                :class="selectedLayerId === layer.id ? 'bg-primary/15 text-primary font-bold' : 'text-foreground/70 hover:bg-accent'"
+                @click="onLayerSelect(layer.id)"
+              >
+                <MaterialSymbolsFolderOutline class="size-4 shrink-0" />
+                {{ layer.name || layer.layer_type }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="border-t pt-2">
+          <a
+            class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent"
+            @click="router.push('/dataset/layers')"
+          >
+            <MaterialSymbolsSettingsOutline class="size-4 shrink-0" />
+            管理分层
+          </a>
+        </div>
       </div>
 
       <!-- Main: Dataset Grid -->

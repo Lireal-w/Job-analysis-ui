@@ -21,6 +21,15 @@ const routes: RouteRecordRaw[] = [
           icon: 'ant-design:table-outlined',
         },
       },
+      {
+        name: 'DataLayerManagement',
+        path: '/dataset/layers',
+        component: () => import('#/views/data-layer/index.vue'),
+        meta: {
+          title: $t('page.dataset.layerManagement'),
+          icon: 'ant-design:layers-outlined',
+        },
+      },
     ],
   },
 ];

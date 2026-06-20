@@ -60,7 +60,8 @@
   },
   "dataset": {
     "title": "数据资产",
-    "management": "数据集管理"
+    "management": "数据集管理",
+    "layerManagement": "数据分层管理"
   },
   "jobDashboard": {
     "title": "岗位数据分析"

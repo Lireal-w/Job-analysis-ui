@@ -48,12 +48,19 @@ export interface DatasetParams {
   size?: number;
 }
 
+export interface DataLayerParams {
+  name?: string;
+  layer_type?: string;
+  page?: number;
+  size?: number;
+}
+
 export async function getAllDataLayerApi() {
   return requestClient.get<DataLayerResult[]>('/api/v1/sys/data-storage/layers/all');
 }
 
-export async function getDataLayerListApi() {
-  return requestClient.get<DataLayerResult[]>('/api/v1/sys/data-storage/layers');
+export async function getDataLayerListApi(params?: DataLayerParams) {
+  return requestClient.get<PaginationResult<DataLayerResult>>('/api/v1/sys/data-storage/layers', { params });
 }
 
 export async function createDataLayerApi(data: { name: string; layer_type: string; description?: string; sort?: number }) {

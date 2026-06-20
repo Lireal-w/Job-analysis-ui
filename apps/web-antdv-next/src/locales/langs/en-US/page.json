@@ -60,7 +60,8 @@
   },
   "dataset": {
     "title": "Data Assets",
-    "management": "Dataset Management"
+    "management": "Dataset Management",
+    "layerManagement": "Data Layer Management"
   },
   "jobDashboard": {
     "title": "Job Data Analysis"
