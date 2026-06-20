@@ -162,6 +162,7 @@ async function handleSave() {
         config: widget.config || {},
         position: widget.position || {},
         sort: widget.sort || 0,
+        report_id: reportId.value,
       };
 
       if (widget._isNew && reportId.value) {
@@ -191,6 +192,7 @@ async function handleSaveWidget() {
       config: widget.config || {},
       position: widget.position || {},
       sort: widget.sort || 0,
+      report_id: reportId.value!,
     };
 
     if (widget._isNew) {
@@ -224,7 +226,7 @@ function handlePreview() {
     message.warning('请先保存报表');
     return;
   }
-  window.open(`/report/designer/${reportId.value}/preview`, '_blank');
+  window.open(`/report/preview/${reportId.value}`, '_blank');
 }
 
 // Grid style for widget placement

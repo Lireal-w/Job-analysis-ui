@@ -31,6 +31,16 @@ const routes: RouteRecordRaw[] = [
           hideInMenu: true,
         },
       },
+      {
+        name: 'ReportPreview',
+        path: '/report/preview/:id',
+        component: () => import('#/views/report/preview/index.vue'),
+        meta: {
+          title: '报表预览',
+          icon: 'ant-design:eye-outlined',
+          hideInMenu: true,
+        },
+      },
     ],
   },
 ];

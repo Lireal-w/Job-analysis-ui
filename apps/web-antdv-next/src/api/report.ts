@@ -43,6 +43,7 @@ export type UpdateReportParams = Partial<CreateReportParams>;
 export interface CreateReportWidgetParams {
   widget_type: string;
   title?: string;
+  report_id: number;
   query_id?: number;
   query_sql?: string;
   config?: Record<string, any>;
@@ -93,7 +94,10 @@ export async function getReportWidgetsApi(pk: number) {
 }
 
 export async function createReportWidgetApi(pk: number, data: CreateReportWidgetParams) {
-  return requestClient.post(`/api/v1/sys/reports/${pk}/widgets`, data);
+  return requestClient.post(`/api/v1/sys/reports/${pk}/widgets`, {
+    ...data,
+    report_id: pk,
+  });
 }
 
 export async function updateReportWidgetApi(widgetId: number, data: UpdateReportWidgetParams) {
