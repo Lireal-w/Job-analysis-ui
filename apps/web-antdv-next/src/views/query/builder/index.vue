@@ -7,7 +7,6 @@ import {
   VbenButton,
 } from '@vben/common-ui';
 import { $t } from '@vben/locales';
-import { VxeGrid } from 'vxe-table';
 
 import { message } from 'antdv-next';
 
@@ -363,16 +362,36 @@ watch(() => queryResult.value, (val) => {
             <div v-else-if="queryResult.rows.length === 0 && queryResult.status === 'success'" class="flex h-40 items-center justify-center text-sm text-gray-400">
               查询执行成功，但未返回任何数据
             </div>
-            <div v-else class="p-2">
-              <VxeGrid
-                :column-config="{ resizable: true }"
-                :data="resultData"
-                :columns="resultColumns"
-                :height="400"
-                border
-                stripe
-                auto-resize
-              />
+            <div v-else class="overflow-auto" style="max-height: 400px">
+              <table class="query-result-table w-full border-collapse text-sm">
+                <thead>
+                  <tr>
+                    <th
+                      v-for="col in resultColumns"
+                      :key="col.field"
+                      class="sticky top-0 border-b bg-muted px-3 py-2 text-left font-medium text-muted-foreground"
+                    >
+                      {{ col.title }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(row, rowIdx) in resultData"
+                    :key="row._row_key"
+                    class="border-b transition-colors hover:bg-accent/50"
+                    :class="rowIdx % 2 === 0 ? 'bg-background' : 'bg-muted/20'"
+                  >
+                    <td
+                      v-for="col in resultColumns"
+                      :key="col.field"
+                      class="px-3 py-2 text-foreground/80"
+                    >
+                      {{ row[col.field] != null ? row[col.field] : '-' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div v-else class="p-3">
@@ -446,5 +465,18 @@ watch(() => queryResult.value, (val) => {
 .tab-item.text-primary {
   opacity: 1;
   border-bottom-color: var(--vben-primary-color);
+}
+
+.query-result-table {
+  border-color: var(--vben-border-color);
+}
+
+.query-result-table thead th {
+  background-color: var(--vben-card-bg);
+  z-index: 1;
+}
+
+.query-result-table tbody tr:last-child {
+  border-bottom: none;
 }
 </style>
