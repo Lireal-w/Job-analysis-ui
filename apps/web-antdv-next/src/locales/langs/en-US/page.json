@@ -38,7 +38,9 @@
     "sysMenu": "User",
     "sysRole": "Role",
     "sysUser": "User",
-    "profile": "Profile"
+    "profile": "Profile",
+    "appVersion": "App Version",
+    "appVersionList": "Version List"
   },
   "crawler": {
     "title": "Crawler",

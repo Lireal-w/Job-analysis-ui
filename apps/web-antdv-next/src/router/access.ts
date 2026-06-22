@@ -33,16 +33,6 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
         duration: 1.5,
       });
       const menus = await getAllMenusApi();
-      // 合并前端自定义菜单
-      menus.push({
-        meta: {
-          title: '岗位数据分析',
-          icon: 'ant-design:bar-chart-outlined',
-        },
-        name: 'JobDashboard',
-        path: '/job-dashboard',
-        component: '/job-dashboard/index',
-      });
       return menus;
     },
     // 可以指定没有权限跳转403页面

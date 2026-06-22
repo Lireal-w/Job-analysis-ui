@@ -72,6 +72,12 @@ function convertRoutes(
       console.error('route name is required', route);
     }
 
+    // 确保 path 不为 null，避免 vue-router 处理时抛出异常
+    if (route.path == null) {
+      console.warn(`route "${name || 'unknown'}" path is null, setting to empty string`);
+      route.path = '';
+    }
+
     // layout转换
     if (component && layoutMap[component]) {
       route.component = layoutMap[component];

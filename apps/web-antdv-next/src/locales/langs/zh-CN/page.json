@@ -38,7 +38,9 @@
     "sysMenu": "菜单管理",
     "sysRole": "角色管理",
     "sysUser": "用户管理",
-    "profile": "个人中心"
+    "profile": "个人中心",
+    "appVersion": "移动端版本管理",
+    "appVersionList": "版本列表"
   },
   "crawler": {
     "title": "爬虫管理",

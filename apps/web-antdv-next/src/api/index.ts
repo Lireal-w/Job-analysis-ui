@@ -21,3 +21,4 @@ export * from './todo';
 export * from './permission';
 export * from './audit-log';
 export * from './alert';
+export * from './app-version';
