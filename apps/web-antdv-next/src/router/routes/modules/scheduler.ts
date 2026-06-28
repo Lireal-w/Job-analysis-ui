@@ -29,6 +29,24 @@ const routes: RouteRecordRaw[] = [
           icon: 'ix:scheduler',
         },
       },
+      {
+        name: 'SchedulerRegistered',
+        path: '/scheduler/registered',
+        component: () => import('#/views/scheduler/registered/index.vue'),
+        meta: {
+          title: $t('page.menu.schedulerRegistered'),
+          icon: 'mdi:file-document-multiple-outline',
+        },
+      },
+      {
+        name: 'SchedulerDynamic',
+        path: '/scheduler/dynamic',
+        component: () => import('#/views/scheduler/dynamic/index.vue'),
+        meta: {
+          title: $t('page.menu.schedulerDynamic'),
+          icon: 'material-symbols:schedule',
+        },
+      },
     ],
   },
 ];
