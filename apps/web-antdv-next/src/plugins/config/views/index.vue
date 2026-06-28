@@ -3,6 +3,7 @@ import { h, nextTick, onMounted, ref, watch } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
+import Ai from '#/plugins/config/views/ai.vue';
 import Email from '#/plugins/config/views/email.vue';
 import Login from '#/plugins/config/views/login.vue';
 import UserSecurity from '#/plugins/config/views/user-security.vue';
@@ -30,6 +31,11 @@ const tabItems = [
     label: '邮件配置',
     icon: () => h('span', { class: 'icon-[ic--outline-email] -mb-1 size-5' }),
   },
+  {
+    key: '3',
+    label: 'AI 配置',
+    icon: () => h('span', { class: 'icon-[carbon--ai-launch] -mb-1 size-5' }),
+  },
 ];
 
 watch(activeKey, async (newValue) => {
@@ -49,6 +55,12 @@ watch(activeKey, async (newValue) => {
     await nextTick();
     if (emailRef.value) {
       await emailRef.value.fetchConfigList();
+    }
+  }
+  if (newValue === '3') {
+    await nextTick();
+    if (aiRef.value) {
+      Ai(); // AI 配置自带 onMounted 自动加载
     }
   }
 });
@@ -79,6 +91,7 @@ onMounted(async () => {
           <UserSecurity v-if="item.key === '0'" ref="userSecurityRef" />
           <Login v-else-if="item.key === '1'" ref="loginRef" />
           <Email v-else-if="item.key === '2'" ref="emailRef" />
+          <Ai v-else-if="item.key === '3'" />
         </template>
       </a-tabs>
     </a-card>
