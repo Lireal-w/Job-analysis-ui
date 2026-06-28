@@ -40,7 +40,10 @@
     "sysUser": "用户管理",
     "profile": "个人中心",
     "appVersion": "移动端版本管理",
-    "appVersionList": "版本列表"
+    "appVersionList": "版本列表",
+    "sysWorker": "Worker 节点管理",
+    "schedulerRegistered": "已注册任务",
+    "schedulerDynamic": "动态调度"
   },
   "crawler": {
     "title": "爬虫管理",

@@ -40,7 +40,10 @@
     "sysUser": "User",
     "profile": "Profile",
     "appVersion": "App Version",
-    "appVersionList": "Version List"
+    "appVersionList": "Version List",
+    "sysWorker": "Worker Nodes",
+    "schedulerRegistered": "Registered Tasks",
+    "schedulerDynamic": "Dynamic Schedules"
   },
   "crawler": {
     "title": "Crawler",
