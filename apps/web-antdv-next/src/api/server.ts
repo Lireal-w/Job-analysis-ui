@@ -48,68 +48,68 @@ export interface SSHTestConnectionParams {
 }
 
 /**
- * 分页获取 SSH 服务器列表
+ * 分页获取服务器列表
  */
 export async function getSSHServerListApi(params?: SSHServerParams) {
   return requestClient.get<PaginationResult<SSHServerResult>>(
-    '/api/v1/sys/ssh',
+    '/api/v1/sys/servers',
     { params },
   );
 }
 
 /**
- * 获取所有 SSH 服务器
+ * 获取所有服务器
  */
 export async function getAllSSHServerApi() {
-  return requestClient.get<SSHServerResult[]>('/api/v1/sys/ssh/all');
+  return requestClient.get<SSHServerResult[]>('/api/v1/sys/servers/all');
 }
 
 /**
- * 获取 SSH 服务器详情
+ * 获取服务器详情
  */
 export async function getSSHServerApi(pk: number) {
-  return requestClient.get<SSHServerResult>(`/api/v1/sys/ssh/${pk}`);
+  return requestClient.get<SSHServerResult>(`/api/v1/sys/servers/${pk}`);
 }
 
 /**
- * 创建 SSH 服务器
+ * 创建服务器
  */
 export async function createSSHServerApi(data: CreateSSHServerParams) {
-  return requestClient.post('/api/v1/sys/ssh', data);
+  return requestClient.post('/api/v1/sys/servers', data);
 }
 
 /**
- * 更新 SSH 服务器
+ * 更新服务器
  */
 export async function updateSSHServerApi(
   pk: number,
   data: UpdateSSHServerParams,
 ) {
-  return requestClient.put(`/api/v1/sys/ssh/${pk}`, data);
+  return requestClient.put(`/api/v1/sys/servers/${pk}`, data);
 }
 
 /**
- * 删除 SSH 服务器（支持批量）
+ * 删除服务器（支持批量）
  */
 export async function deleteSSHServerApi(pks: number[]) {
-  return requestClient.delete('/api/v1/sys/ssh', { params: { pks } });
+  return requestClient.delete('/api/v1/sys/servers', { params: { pks } });
 }
 
 /**
- * 测试 SSH 连接
+ * 测试连接
  */
 export async function testSSHConnectionApi(data: SSHTestConnectionParams) {
   return requestClient.post<{ success?: boolean; message?: string }>(
-    '/api/v1/sys/ssh/test-connection',
+    '/api/v1/sys/servers/test-connection',
     data,
   );
 }
 
 /**
- * 更新 SSH 服务器状态
+ * 更新服务器状态
  */
 export async function updateSSHServerStatusApi(pk: number, status: number) {
-  return requestClient.put(`/api/v1/sys/ssh/${pk}/status`, null, {
+  return requestClient.put(`/api/v1/sys/servers/${pk}/status`, null, {
     params: { status },
   });
 }
