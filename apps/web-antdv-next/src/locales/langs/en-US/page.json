@@ -43,7 +43,8 @@
     "appVersionList": "Version List",
     "sysWorker": "Worker Nodes",
     "schedulerRegistered": "Registered Tasks",
-    "schedulerDynamic": "Dynamic Schedules"
+    "schedulerDynamic": "Dynamic Schedules",
+    "appDownload": "Download App"
   },
   "crawler": {
     "title": "Crawler",

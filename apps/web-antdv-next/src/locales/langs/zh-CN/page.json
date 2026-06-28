@@ -43,7 +43,8 @@
     "appVersionList": "版本列表",
     "sysWorker": "Worker 节点管理",
     "schedulerRegistered": "已注册任务",
-    "schedulerDynamic": "动态调度"
+    "schedulerDynamic": "动态调度",
+    "appDownload": "下载 App"
   },
   "crawler": {
     "title": "爬虫管理",
