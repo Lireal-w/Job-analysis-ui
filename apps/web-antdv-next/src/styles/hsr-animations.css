@@ -1,0 +1,155 @@
+/* HSR Theme Animations
+   崩坏：星穹铁道 风格动画
+   特征：流畅缓动、星光闪烁、呼吸光效、悬浮粒子
+*/
+
+/* === 星芒闪烁 === */
+@keyframes hsr-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.hsr-star {
+  display: inline-block;
+  animation: hsr-twinkle 3s ease-in-out infinite;
+
+  &:nth-child(2n) {
+    animation-delay: 0.5s;
+  }
+
+  &:nth-child(3n) {
+    animation-delay: 1s;
+  }
+}
+
+/* === 呼吸光效 === */
+@keyframes hsr-breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 6px rgba(168, 85, 247, 0.3),
+      0 0 12px rgba(168, 85, 247, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 12px rgba(168, 85, 247, 0.5),
+      0 0 24px rgba(168, 85, 247, 0.2),
+      0 0 48px rgba(168, 85, 247, 0.1);
+  }
+}
+
+.hsr-glow {
+  animation: hsr-breathe 3s ease-in-out infinite;
+}
+
+/* === 星轨光带 === */
+@keyframes hsr-trail {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.hsr-starlight {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 169, 110, 0.3) 30%,
+      rgba(201, 169, 110, 0.6) 50%,
+      rgba(201, 169, 110, 0.3) 70%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: hsr-trail 4s linear infinite;
+    pointer-events: none;
+  }
+}
+
+/* === 值数字跳动 === */
+@keyframes hsr-count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hsr-count-anim {
+  animation: hsr-count-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === 淡入上浮 === */
+@keyframes hsr-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hsr-fade-in {
+  animation: hsr-fade-in-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* === 悬浮粒子动画 === */
+@keyframes hsr-float-particle {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(-60px) translateX(10px) scale(0.5); opacity: 0; }
+}
+
+.hsr-particles {
+  position: relative;
+  overflow: hidden;
+}
+
+/* === 页面转场 === */
+@keyframes hsr-page-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hsr-page-transition {
+  animation: hsr-page-enter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === 进度条光效 === */
+@keyframes hsr-bar-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.hsr-bar-glow {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    animation: hsr-bar-shimmer 2s ease-in-out infinite;
+  }
+}
