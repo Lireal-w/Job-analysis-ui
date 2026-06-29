@@ -16,7 +16,7 @@ import {
   SvgDownloadIcon,
 } from '@vben/icons';
 
-import { getAllCrawlTaskApi } from '#/api';
+import { getAllCrawlTaskApi, getOnlineWorkerApi } from '#/api';
 import { getServerMonitorApi } from '#/api/monitor';
 
 import AnalyticsTrends from './analytics-trends.vue';
@@ -74,9 +74,10 @@ const currentTab = ref('trends');
 async function loadDashboardData() {
   loading.value = true;
   try {
-    const [crawlRes, monitorRes] = await Promise.allSettled([
+    const [crawlRes, monitorRes, workerRes] = await Promise.allSettled([
       getAllCrawlTaskApi(),
       getServerMonitorApi(),
+      getOnlineWorkerApi(),
     ]);
 
     // 采集任务数据 -> 概览卡片
@@ -92,9 +93,12 @@ async function loadDashboardData() {
       };
     }
 
-    // 服务器监控数据
-    if (monitorRes.status === 'fulfilled' && monitorRes.value) {
-      // worker/online 信息
+    // Worker 数据 - 在线 Worker 数
+    if (workerRes.status === 'fulfilled' && workerRes.value) {
+      const online = workerRes.value;
+      const total = Array.isArray(online) ? online.length : 0;
+      overviewItems.value[1] = { ...overviewItems.value[1], totalValue: total, value: total };
+      overviewItems.value[2] = { ...overviewItems.value[2], totalValue: total, value: total };
     }
   } catch (error) {
     console.error('加载仪表盘数据失败:', error);

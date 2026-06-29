@@ -19,7 +19,7 @@ import {
   updateDynamicScheduleApi,
 } from '#/api/dynamic-schedule';
 
-import { createSchema, useColumns } from './data';
+import { useColumns } from './data';
 
 const columns = useColumns(onActionClick);
 
@@ -180,8 +180,10 @@ const [EditModal, editModalApi] = useVbenModal({
       editFormApi.resetForm();
       if (data) {
         editFormData.value = data;
-        // 编辑模式：name 不可编辑；切换 createSchema
-        editFormApi.setSchema(createSchema(true));
+        // 编辑模式：name 不可编辑
+        editFormApi.updateSchema([
+          { fieldName: 'name', componentProps: { disabled: true }, rules: '' },
+        ]);
         // 从 backend 响应中提取扁平字段
         editFormApi.setValues({
           ...data,
@@ -202,7 +204,9 @@ const [EditModal, editModalApi] = useVbenModal({
       } else {
         editFormData.value = null;
         // 新建模式：name 可编辑
-        editFormApi.setSchema(createSchema(false));
+        editFormApi.updateSchema([
+          { fieldName: 'name', componentProps: { disabled: false }, rules: 'required' },
+        ]);
       }
     }
   },
@@ -220,7 +224,7 @@ const [EditModal, editModalApi] = useVbenModal({
       </template>
 
       <!-- 调度信息自定义插槽 -->
-      <template #schedule_default="{ row }">
+      <template #schedule="{ row }">
         <template v-if="row.type === 0">
           <span>每 {{ row.interval_every || '-' }} {{ row.interval_period || '' }}</span>
         </template>
@@ -230,7 +234,7 @@ const [EditModal, editModalApi] = useVbenModal({
       </template>
 
       <!-- 状态切换 -->
-      <template #enabled_default="{ row }">
+      <template #enabled="{ row }">
         <a-switch
           :checked="row.enabled"
           size="small"
