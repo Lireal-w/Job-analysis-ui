@@ -44,7 +44,8 @@
     "sysWorker": "Worker Nodes",
     "schedulerRegistered": "Registered Tasks",
     "schedulerDynamic": "Dynamic Schedules",
-    "appDownload": "Download App"
+    "appDownload": "Download App",
+    "chat": "Chat"
   },
   "crawler": {
     "title": "Crawler",

@@ -44,7 +44,8 @@
     "sysWorker": "Worker 节点管理",
     "schedulerRegistered": "已注册任务",
     "schedulerDynamic": "动态调度",
-    "appDownload": "下载 App"
+    "appDownload": "下载 App",
+    "chat": "聊天"
   },
   "crawler": {
     "title": "爬虫管理",
