@@ -427,10 +427,10 @@ onUnmounted(() => {
             <button class="ml-auto text-xs text-[var(--text-tertiary)] hover:text-[var(--text-primary)]" @click="showConfigModal = true">配置</button>
           </template>
           <template v-else-if="currentConv">
-            <span class="mr-2 text-lg">{{ conv.type === 'group' ? '👥' : '👤' }}</span>
+            <span class="mr-2 text-lg">{{ currentConv.type === 'group' ? '👥' : '👤' }}</span>
             <span class="font-medium">{{ convName(currentConv) }}</span>
             <span class="ml-2 text-xs text-[var(--text-tertiary)]">
-              {{ conv.type === 'group' ? `${conv.member_ids.length} 人` : '私聊' }}
+              {{ currentConv.type === 'group' ? `${currentConv.member_ids.length} 人` : '私聊' }}
             </span>
           </template>
           <span v-else class="text-[var(--text-tertiary)]">选择一个会话</span>
